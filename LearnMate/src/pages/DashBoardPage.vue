@@ -32,7 +32,7 @@ routeSecurity();
         top: 0;
         left: 0;
         width: 250px;
-        height: 100vh; // Full height
+        height: 100vh;
         background-color: #fbde68;
         box-shadow: 2px 0 5px rgba(0,0,0,0.1);
         z-index: 1000;
