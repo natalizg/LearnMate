@@ -18,7 +18,7 @@ const navProps = defineProps({
                 </div>
             </div>
             <div class="right">
-                <a href="">Iniciar Sesión</a>
+                <router-link to="/login"><a href="">Iniciar Sesión</a></router-link>
             </div>
         </nav>
     </div>
@@ -28,7 +28,7 @@ const navProps = defineProps({
 <style lang="scss" scoped>
 
 .top-nav{
-    background-color: #ff7aac;
+    background-color: #fbde68;
     padding-bottom:20px;
    nav{
     display:flex;

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-
+import FilterComponent from '../components/FilterComponent.vue';
+import TeacherCardComponent from '../components/TeacherCardComponent.vue';
 const p = document.getElementById('desplegar');
 const pDesplegado = ref(false)
 
@@ -14,7 +15,7 @@ const showHideP = () => {
         <div class="left">
             <h1>Clases particulares de inglés online: encuentra tu profesor ahora</h1>
             <div class="p-desplegable">
-                <p>Preply es la plataforma online líder de aprendizaje de idiomas donde podrás  
+                <p>LearMate es la plataforma online líder de aprendizaje de idiomas donde podrás  
                     <a href="#" id="leerMas" v-show="!pDesplegado" @click="showHideP">... Leer Más</a>
                 </p>
             </div>
@@ -31,6 +32,13 @@ const showHideP = () => {
         <div class="right">
             <img class="first" src="../assets/videocall2.png" height="450px" alt="VideoLlamada">
         </div>
+    </div>
+
+    <div class="teachers">
+        <TeacherCardComponent/>
+        <TeacherCardComponent/>
+        <TeacherCardComponent/>
+        <TeacherCardComponent/>
     </div>
 </template>
 
@@ -78,5 +86,10 @@ const showHideP = () => {
             margin-left:100px;
             margin-right:350px;
         }
+    }
+    .teachers{
+        margin-top:100px;
+        display:flex;
+        justify-content: center;
     }
 </style>

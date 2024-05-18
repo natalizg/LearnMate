@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import SliderComponent from '../components/SliderComponent.vue';
-
-
 </script>
 
 <template>
@@ -9,11 +7,11 @@ import SliderComponent from '../components/SliderComponent.vue';
     <div class="ad-interior">
         <div class="left">
             <h1>Aprende con los mejores profesores de idiomas.</h1>
-            <h3>Nuestros profesores particulares ofrecen a los estudiantes todo lo que necesitan para adquirir confianza y mejorar sus notas</h3>
+            <h2>Aprende <span>Hoy</span>, lidera <span>Mañana</span></h2>
             <button>Empezar →</button>
         </div>
         <div class="right">
-            <img class="first" src="../assets/videocall-overlap.png" height="450px" alt="VideoLlamada">
+            <img class="first" src="../assets/ad-final.png" height="450px" alt="girl">
         </div>
     </div>
     </div>
@@ -65,14 +63,13 @@ import SliderComponent from '../components/SliderComponent.vue';
             </div>
         </div>
         <SliderComponent/>
-        
     </div>
 </template>
 
 
 <style lang="scss" scoped>
     .ad{
-        background-color: #ff7aac;
+        background-color: #fbde68;
         .ad-interior{
             display:flex;
             margin:auto;
@@ -92,8 +89,14 @@ import SliderComponent from '../components/SliderComponent.vue';
                     padding: 0;
                     letter-spacing: -2px;
                 }
-                h3{
-                    margin-right:80px;
+                h2{
+                    font-size: 25px;
+                    span{
+                        background-color: white;
+                        padding: 3px 7px;
+                        border: 1px solid black;
+                        border-radius:10px;
+                    }
                 }
                 button{
                     margin-top:5px;
@@ -110,7 +113,7 @@ import SliderComponent from '../components/SliderComponent.vue';
             }
             .right{
                 margin-top:30px;
-                margin-left:3%;
+                margin-left:5%;
             }
         }
     }

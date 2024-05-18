@@ -19,7 +19,7 @@
                     <div class="column">
                         <div class="slider-testimony">
                             <h2 class="slider-caption">"La energía que aporta a cada clase es increíble"</h2>
-                            <p>Ismael</p>
+                            <p>Clara</p>
                             <p class="slider-txt">Lorem ipsum dolor sit amet, consectetur adipisicing elit. At cupiditate omnis possimus illo quos, corporis minima!</p>
                         </div>
                     </div>
@@ -56,12 +56,12 @@
             <div class="slider-contents">
                 <div class="section">
                     <div class="column">
-                        <img src="../assets/profesora2.png" alt="">
+                        <img src="../assets/last-slider.jpg" alt="">
                     </div>
                     <div class="column">
                         <div class="slider-testimony">
                             <h2 class="slider-caption">"La energía que aporta a cada clase es increíble"</h2>
-                            <p>Ismael</p>
+                            <p>Emma</p>
                             <p class="slider-txt">Lorem ipsum dolor sit amet, consectetur adipisicing elit. At cupiditate omnis possimus illo quos, corporis minima!</p>
                         </div>
                     </div>
@@ -124,8 +124,10 @@
                         display: flex;
                         justify-content: flex-end;
                         margin: 0 70px;
+                        img{
+                            width:400px;
+                        }
                         .slider-testimony{
-   
                             h2{
                                 font-size:50px;
                                 max-width: 500px;
