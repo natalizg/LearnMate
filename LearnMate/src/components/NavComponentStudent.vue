@@ -12,7 +12,6 @@
                 <button><img src="../assets/logout.png" alt=""></button>
             </div>
         </nav>
-        <hr/>
     </div>
     
 </template>
@@ -20,10 +19,6 @@
 <style lang="scss" scoped>
 
 .top-nav{
-    hr{
-        border:1px solid #f5f5f8;
-        margin:0;
-    }
    nav{
     padding-bottom:5px;
     display:flex;

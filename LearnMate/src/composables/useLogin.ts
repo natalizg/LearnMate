@@ -1,8 +1,8 @@
 import { ref } from "vue";
 import router from "../router";
-const isLog = ref(false);
+const isLog = ref(true);
 const isProfessor = ref(false);
-const isStudent = ref(false);
+const isStudent = ref(true);
 export default function useLogin(){
 
     function login(email:String, password:String){
