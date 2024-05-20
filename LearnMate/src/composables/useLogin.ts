@@ -11,13 +11,14 @@ export default function useLogin(){
         //por ahora vamos a poner que es student y que todo sale bien:
         isStudent.value = true;
         isLog.value = true;
-        router.push("/student-dashboard");
+        router.push("/dashboard");
     }
 
     function logout(){
         isLog.value = false;
         isProfessor.value = false;
         isStudent.value = false;
+        router.push("/");
         //llevar al componente homepage o puedes cambiar la logica y simplemente refrescar la pag
     }
 

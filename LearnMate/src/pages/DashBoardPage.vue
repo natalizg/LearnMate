@@ -3,6 +3,17 @@
       <!--SEPARAR A OTRO COMPONENTE-->
       <div class="sidebar">
         <ul>
+          <li class="perfil-container">
+            <div class="perfil">
+              <div class="img-profile">
+                <img src="../assets/profesora2.png" alt="">
+              </div>
+              <div class="perfil-data">
+                <h3>Natalia</h3>
+                <p>Estudiante</p>
+              </div>
+            </div>
+          </li>
           <li>
             <div class="opcion">
               <p>Inicio</p>
@@ -36,7 +47,13 @@
             <h3>Dashboard</h3>
         </div>
         <div class="row-prof-alum">
-          <h4>Tus profesores/Alumnos*</h4>
+          <h3>Tus profesores/Alumnos*</h3>
+          <div class="prof-alum">
+            <StudentProfessorCard/>
+            <StudentProfessorCard/>
+            <StudentProfessorCard/>
+            <StudentProfessorCard/>
+          </div>
 
         </div>
         <div class="row-clases">
@@ -49,6 +66,7 @@
   <script setup lang="ts">
   import useLogin from '../composables/useLogin';
   import TableClassComponent from '../components/TableClassComponent.vue';
+import StudentProfessorCard from '../components/StudentProfessorCard.vue';
   const { routeSecurity } = useLogin();
   routeSecurity();
   </script>
@@ -62,7 +80,7 @@
       top: 0;
       left: 0;
       width: 250px;
-      height: 100vh;
+      height: auto;
       background-color: white;
       box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
   
@@ -88,10 +106,10 @@
             margin:auto;
             p {
               margin: 0;
-              width: 70%;
+              width: 150px;
             }
             i {
-              width: 30%;
+              width: 40px;
               color: #beabc2;
             }
           }
@@ -101,6 +119,34 @@
             .opcion i {
                 color: #54c4f6; /* Cambia el color del icono al azul */
             }
+          }
+        }
+        .perfil-container{
+          .perfil{
+            display:flex;
+            img{
+              width: 80px;
+              height:80px;
+              object-fit: cover;
+              border-radius:50%;
+            }
+            .perfil-data{
+              margin-left:10px;
+              margin-top:15px;
+              h3{
+                margin:0;
+                font-weight: 600;
+              }
+              p{
+                margin:0;
+                color:lightgrey;
+                font-size: 14px;
+              }
+            }
+          }
+          &:hover {
+            background-color:white;
+            color:black;
           }
         }
       }
@@ -136,6 +182,11 @@
       }
       .row-prof-alum{
         margin-top: 50px;
+        .prof-alum{
+          display:flex;
+          flex-wrap: wrap;
+          gap:20px;
+        }
       }
       .row-clases{
         margin-top: 50px;

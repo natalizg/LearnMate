@@ -49,9 +49,10 @@
   
 <script setup lang="ts">
     import { ref } from 'vue';
+    import useLogin from '../composables/useLogin';
     import showIcon from '../assets/eye.png';
     import hideIcon from '../assets/hidden.png';
-    
+    const { login } = useLogin()
     const email = ref('');
     const password = ref('');
     const passwordFieldType = ref<'password' | 'text'>('password');
@@ -61,9 +62,7 @@
     };
   
     const handleSubmit = () => {
-        console.log('Email:', email.value);
-        console.log('Password:', password.value);
-        // Aquí puedes agregar la lógica de autenticación
+        login(email.value, password.value);
     };
 </script>
   

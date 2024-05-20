@@ -3,7 +3,7 @@
       <div class="col-12 grid-margin">
         <div class="card">
           <div class="card-body">
-            <h4 class="card-title">Clases Particulares</h4>
+            <h3 class="card-title">Clases Particulares</h3>
             <div class="table-responsive">
               <table class="table">
                 <thead>
@@ -16,24 +16,24 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <td>
-                      <img src="../assets/profesora3.png" class="me-2" alt="image"> David Grey
+                    <td class="name">
+                      <img src="../assets/profesora3.png" class="me-2" alt="image"> <p>David Grey</p>
                     </td>
                     <td class="asignatura"> <p>Química</p></td>
                     <td> 22/05/2024</td>
                     <td> 17:30 </td>
                   </tr>
                   <tr>
-                    <td>
-                      <img src="../assets/laptop-man-woman.jpg" class="me-2" alt="image"> Stella Johnson
+                    <td class="name">
+                      <img src="../assets/laptop-man-woman.jpg" class="me-2" alt="image">  <p> Stella Johnson</p>
                     </td>
                     <td class="asignatura"> <p>Historia</p> </td>
                     <td> 10/05/2024</td>
                     <td> 16:00 </td>
                   </tr>
                   <tr>
-                    <td>
-                      <img src="../assets/asian-woman.jpg" class="me-2" alt="image"> Marina Michel
+                    <td class="name">
+                      <img src="../assets/asian-woman.jpg" class="me-2" alt="image">  <p>Marina Michel</p>
                     </td>
                     <td class="asignatura"> <p>Matemáticas</p> </td>
                     <td> 16/08/2024</td>
@@ -77,7 +77,7 @@
   }
   
   .card {
-    border: 1px solid #ccc;
+    background-color: white;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     
@@ -87,6 +87,13 @@
     
     .card-title {
       margin-bottom: 15px;
+    }
+  }
+
+  .name{
+    display:flex;
+    p{
+      margin-left:15px;
     }
   }
   </style>

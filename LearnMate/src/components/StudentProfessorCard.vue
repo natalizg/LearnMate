@@ -5,12 +5,14 @@
 <template>
     <div class="teacher-card">
         <div class="card">
-            <img src="../assets/asian-woman.jpg" alt="">
+            <div class="img">
+                <img src="../assets/profesora3.png" alt="">
+            </div>
             <div class="card-content">
                 <div class="name-description">
                     <h2>Natalia Zarzuela</h2>
                     <div class="profession">
-                        Química
+                        Inglés
                     </div>
                 </div>
             </div>
@@ -20,32 +22,41 @@
 
 <style lang="scss" scoped>
 .teacher-card{
-    background-color:white;
-    margin:20px;
-    border: 1px solid black;
-    border-radius:10px;
+    displaY:flex;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     height:150px;
     width:300px;
     .card{
         display: flex;
-        overflow:hidden;
-        img{
-            max-width: 100%;
-            height: 150px;
-            width:150px;
-            border-radius: 10px;
-            object-fit: cover;
-            margin:0;
+        .img{
+            display:flex;
+            width:70%;
+            justify-content: center;
+            align-items: center;
+            img{
+                max-width: 100%;
+                height: 100px;
+                width:100px;
+                border-radius: 50%;
+                object-fit: cover;
+                margin:0;
+            }
         }
         .card-content{
             margin:0;
+            display:flex;
+            align-items: center;
             .name-description{
-                margin: 0px 35px;
+                margin: 0px 15px;
                 p{
                     font-size:17px;
                 }
                 .profession{
                     background-color:lightcoral;
+                    color:white;
+                    font-weight: 600;
                     margin: 5px 0px;
                     margin-right:15px;
                     padding: 5px;
