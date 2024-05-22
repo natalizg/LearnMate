@@ -5,10 +5,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 
 @SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
-public class LearnmatebackApplication {
+public class LearnMateApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(LearnmatebackApplication.class, args);
+		SpringApplication.run(LearnMateApplication.class, args);
 	}
 
 }

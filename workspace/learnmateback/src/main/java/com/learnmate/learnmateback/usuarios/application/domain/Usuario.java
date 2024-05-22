@@ -1,10 +1,8 @@
-package com.learnmate.learnmateback;
+package com.learnmate.learnmateback.usuarios.application.domain;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.NonNull;
 import org.hibernate.validator.constraints.Length;
-import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
 
@@ -35,4 +33,5 @@ public class Usuario implements Serializable {
     @Length(min= 9, max = 9)
     @Column(name="TELEFONO", nullable = false)
     private Integer telefono;
+
 }
