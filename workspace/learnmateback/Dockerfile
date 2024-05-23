@@ -12,4 +12,4 @@ EXPOSE 8080
 
 COPY --from=build /build/libs/learnmateback-1.jar app.jar
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar", "--debug"]
