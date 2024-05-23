@@ -1,16 +1,10 @@
 package com.learnmate.learnmateback.usuarios.adapter.in.rest.model;
 
-import com.learnmate.learnmateback.usuarios.application.domain.Materia;
-import com.learnmate.learnmateback.usuarios.application.domain.TramoHorario;
-import com.learnmate.learnmateback.usuarios.application.domain.Usuario;
-import jakarta.persistence.Column;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import org.hibernate.validator.constraints.Length;
-
-import java.util.List;
 
 @Data
-//@Schema(name= "MateriaDto", description = "Datos propios de la entidad Materia")
+@Schema(name= "MateriaDto", description = "Datos propios de la entidad Materia")
 public class MateriaDto {
 
     private Long idMateria;

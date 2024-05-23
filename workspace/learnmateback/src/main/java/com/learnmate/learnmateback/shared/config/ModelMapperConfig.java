@@ -1,4 +1,4 @@
-package com.learnmate.learnmateback.shared.configuration;
+package com.learnmate.learnmateback.shared.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
