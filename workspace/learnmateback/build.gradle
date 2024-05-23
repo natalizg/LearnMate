@@ -4,8 +4,8 @@ plugins {
 	id 'io.spring.dependency-management' version '1.1.4'
 }
 
-group = 'com.learnmate'
-version = '0.0.1-SNAPSHOT'
+group = 'com.learnmate.learnmateback'
+version = '1'
 
 java {
 	sourceCompatibility = '17'
