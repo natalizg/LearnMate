@@ -18,7 +18,7 @@ public class ProfesorDto {
 
     private Integer precio;
 
-    private Usuario usuario;
+    //private Usuario usuario;
 
     private Materia materia;
 

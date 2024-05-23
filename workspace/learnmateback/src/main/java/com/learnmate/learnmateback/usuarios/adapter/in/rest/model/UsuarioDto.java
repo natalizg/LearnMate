@@ -17,4 +17,7 @@ public class UsuarioDto {
 
     private Integer telefono;
 
+    private ProfesorDto profesor;
+
+    private EstudianteDto estudiante;
 }
