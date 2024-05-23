@@ -11,7 +11,7 @@
                     </div>
                     <div class="registro-button">
                         <div class="left"><img src="../assets/profesor-icon.png" alt=""></div>
-                        <div class="right" style="margin-right:18px"><router-link to="/signup-profesor"><a href="">Regístrate como profesor</a></router-link></div>
+                        <div class="right" style="margin-right:18px"><router-link to="/signup-professor"><a href="">Regístrate como profesor</a></router-link></div>
                     </div>
                     
                 </div>

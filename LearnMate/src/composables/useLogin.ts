@@ -1,36 +1,67 @@
 import { ref } from "vue";
 import router from "../router";
-const isLog = ref(true);
-const isProfessor = ref(false);
-const isStudent = ref(true);
+
+// Obtener los valores almacenados en localStorage al cargar la página
+const isLog = ref(localStorage.getItem("isLog") === "true" || false);
+const isProfessor = ref(localStorage.getItem("isProfessor") === "true" || false);
+const isStudent = ref(localStorage.getItem("isStudent") === "true" || false);
+
+// Verificar si los valores en localStorage existen
+if (localStorage.getItem("isLog") === null) {
+    localStorage.setItem("isLog", "false");
+}
+
+if (localStorage.getItem("isProfessor") === null) {
+    localStorage.setItem("isProfessor", "false");
+}
+
+if (localStorage.getItem("isStudent") === null) {
+    localStorage.setItem("isStudent", "false");
+}
+
 export default function useLogin(){
 
     function login(email:String, password:String){
-        //lógica que conecta con la base de datos para ver si está conectado.
-        //si entra por ejemplo un profe, guardo el correo para traerme luego todos los datos ya que es la pk
-        //por ahora vamos a poner que es student y que todo sale bien:
+        // Lógica de inicio de sesión...
+        //por ahora vamos a hacer que siempre iniciamos de estudiante
         isStudent.value = true;
         isLog.value = true;
+        // Guardar los valores actualizados en localStorage
+        localStorage.setItem("isLog", isLog.value.toString());
+        localStorage.setItem("isProfessor", isProfessor.value.toString());
+        localStorage.setItem("isStudent", isStudent.value.toString());
         router.push("/dashboard");
     }
 
     function logout(){
+        // Limpiar las variables y el localStorage al cerrar sesión
         isLog.value = false;
         isProfessor.value = false;
         isStudent.value = false;
-        router.push("/");
-        //llevar al componente homepage o puedes cambiar la logica y simplemente refrescar la pag
+        localStorage.removeItem("isLog");
+        localStorage.removeItem("isProfessor");
+        localStorage.removeItem("isStudent");
+        // Redireccionar al componente homepage o refrescar la página
     }
 
     function signProfessor(email:String, password:String){
-        //logica que mete en la base de datos el profesor
-        isLog.value = true;
-        isProfessor.value = true;
+        // Lógica para registrar un profesor...
+        //isLog.value = true;
+        //isProfessor.value = true;
+        // Guardar los valores actualizados en localStorage
+        //localStorage.setItem("isLog", isLog.value.toString());
+        //localStorage.setItem("isProfessor", isProfessor.value.toString());
+
+        router.push("/professor-register");
     }
+    
     function signStudent(email:String, password:String){
-        //logica que mete en la base de datos el estudiante
+        // Lógica para registrar un estudiante...
         isLog.value = true;
         isStudent.value = true;
+        // Guardar los valores actualizados en localStorage
+        localStorage.setItem("isLog", isLog.value.toString());
+        localStorage.setItem("isStudent", isStudent.value.toString());
     }
 
     function routeSecurity(){
@@ -38,7 +69,8 @@ export default function useLogin(){
             router.push("/error");
         }
     }
-    return{
+
+    return {
         isLog,
         isProfessor,
         isStudent,
@@ -47,5 +79,5 @@ export default function useLogin(){
         signProfessor,
         signStudent,
         routeSecurity
-    }
+    };
 }

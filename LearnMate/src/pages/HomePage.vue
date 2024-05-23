@@ -8,7 +8,7 @@ import SliderComponent from '../components/SliderComponent.vue';
         <div class="left">
             <h1>Aprende con los mejores profesores de idiomas.</h1>
             <h2>Aprende <span>Hoy</span>, lidera <span>Mañana</span></h2>
-            <button>Empezar →</button>
+            <button><a href="/login">Empezar →</a></button>
         </div>
         <div class="right">
             <img class="first" src="../assets/ad-final.png" height="450px" alt="girl">
@@ -109,6 +109,10 @@ import SliderComponent from '../components/SliderComponent.vue';
                     font-weight: 600;
                     cursor:pointer;
                     margin-bottom:40px;
+                    a{
+                        color:white;
+                        text-decoration: none;
+                    }
                 }
             }
             .right{

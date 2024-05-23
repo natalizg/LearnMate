@@ -6,6 +6,7 @@ import SignUpAlumnoPage from "../pages/SignUpAlumnoPage.vue"
 import SignUpProfesorPage from "../pages/SignUpProfesorPage.vue"
 import DashBoardPage from "../pages/DashBoardPage.vue"
 import ErrorPage from "../pages/ErrorPage.vue"
+import ProfessorRegister from "../pages/ProfessorRegister.vue"
 const routes: RouteRecordRaw[] = [
     {
         path: "/",
@@ -36,6 +37,11 @@ const routes: RouteRecordRaw[] = [
         path: "/dashboard",
         name: "Panel de control",
         component: DashBoardPage
+    },
+    {
+        path: "/professor-register",
+        name: "Registro Completo Profesor",
+        component: ProfessorRegister
     },
     {
         path: "/error",

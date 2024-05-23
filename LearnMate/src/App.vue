@@ -20,7 +20,7 @@ watchEffect(() => {
 <template>
   <NavOrganism v-if="!isLog" :bg="notHomePage"/>
   <NavComponentProfessor v-if="isProfessor" />
-  <NavComponentStudent v-if="isStudent"/>
+  <NavComponentStudent v-if="isStudent" :bg="!notHomePage"/>
   <router-view></router-view>
   <FooterComponent/>
 </template>
