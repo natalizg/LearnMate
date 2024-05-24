@@ -8,7 +8,7 @@ import SliderComponent from '../components/SliderComponent.vue';
         <div class="left">
             <h1>Aprende con los mejores profesores de idiomas.</h1>
             <h2>Aprende <span>Hoy</span>, lidera <span>Mañana</span></h2>
-            <button><a href="/login">Empezar →</a></button>
+            <div class="go-to-login"><a href="/login">Empezar →</a></div>
         </div>
         <div class="right">
             <img class="first" src="../assets/ad-final.png" height="450px" alt="girl">
@@ -18,7 +18,7 @@ import SliderComponent from '../components/SliderComponent.vue';
     <div class="page-body">
         <div class="remarcable-data">
             <div class="column">
-                <h2>Más de 32 00</h2>
+                <h2>Más de 3 200</h2>
                 <p>profesores experimentados</p>
             </div>
             <div class="column">
@@ -27,7 +27,7 @@ import SliderComponent from '../components/SliderComponent.vue';
                 <p>estrellas</p>
             </div>
             <div class="column">
-                <h2>Más de 15</h2>
+                <h2>Más de 10</h2>
                 <p>materias impartidas</p>
             </div>
             <div class="column">
@@ -98,20 +98,21 @@ import SliderComponent from '../components/SliderComponent.vue';
                         border-radius:10px;
                     }
                 }
-                button{
-                    margin-top:5px;
-                    background-color: black;
-                    color:white;
-                    border:none;
-                    border-radius: 10px;
-                    padding: 20px 130px;
-                    font-size: 18px;
-                    font-weight: 600;
-                    cursor:pointer;
-                    margin-bottom:40px;
+                .go-to-login{
+                    margin-top:50px;
                     a{
+                        background-color: black;
+                        color:white;
+                        border:none;
+                        border-radius: 10px;
+                        padding: 20px 130px;
+                        font-size: 18px;
+                        font-weight: 600;
+                        cursor:pointer;
+                        margin-bottom:40px;
                         color:white;
                         text-decoration: none;
+                        width:100%;
                     }
                 }
             }

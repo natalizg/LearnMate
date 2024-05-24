@@ -16,10 +16,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -48,6 +45,7 @@ public class UsuarioRestController {
             @ApiResponse(responseCode = "401", description = "No esta autorizado para realizar esta operacion"),
             @ApiResponse(responseCode = "403", description = "Acceso prohibido"),
             @ApiResponse(responseCode = "404", description = "No encontrado")})
+    @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping("/loginUser")
     public ResponseEntity<UsuarioDto> loginUser(@RequestParam("email") String email, @RequestParam("password") String password) {
 

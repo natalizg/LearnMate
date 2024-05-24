@@ -60,15 +60,14 @@
                 </div>
                 <p>Síguenos en nuestras redes sociales:</p>
                 <div class="social">
-                <a href=""><img src="../assets/twitter.png" alt="" /></a>
-                <a href=""><img src="../assets/linkedin.png" alt="" /></a>
-                <a href=""><img src="../assets/github.png" alt="" /></a>
-                <a href=""><img src="../assets/youtube.png" alt="" /></a>
-                <a href=""><img src="../assets/telegram.png" alt="" /></a>
+                <a href="https://x.com/"><img src="../assets/twitter.png" alt="" /></a>
+                <a href="https://www.linkedin.com/in/natalizg/"><img src="../assets/linkedin.png" alt="" /></a>
+                <a href="https://github.com/natalizg"><img src="../assets/github.png" alt="" /></a>
+                <a href="https://www.youtube.com/"><img src="../assets/youtube.png" alt="" /></a>
+                <a href="https://web.telegram.org/k/"><img src="../assets/telegram.png" alt="" /></a>
                 </div>
             </div>
             </div>
-            <p class="my-name"> Designed and developed by <span>Natalia Zg</span></p>
         </div>
     </footer>
 </template>
@@ -83,15 +82,19 @@
 footer {
   background-color: rgb(58, 58, 58);
   .container {
-    margin-left: 150px;
-    margin-right: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     .content {
       display: flex;
+      gap:100px;
       padding: 50px;
       justify-content: space-between;
       .col {
         display: flex;
         flex-direction: column;
+        justify-content: center;
+
         p:first-child:not(.flex p:first-child) {
           color: white;
           font-size: 22px;
@@ -120,7 +123,6 @@ footer {
           }
         }
         .column:first-child {
-          margin-right: 50px;
           p:first-child {
             margin-bottom: 25px;
           }
@@ -146,7 +148,7 @@ footer {
               width: 200px;
               height: 40px;
               color: black;
-              background-color: #54c4f6;
+              background-color: #fbde68;
               padding-left: 10px;
               border: 0;
               outline: 0;

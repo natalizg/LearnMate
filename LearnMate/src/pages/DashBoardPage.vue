@@ -2,15 +2,13 @@
 <template>
   <div class="panel">
     <Sidebar />
-    <DashboardCalendarPage/>
-
+    <RouterView></RouterView>
   </div>
 </template>
 
 <script setup lang="ts">
 import useLogin from '../composables/useLogin';
 import Sidebar from '../components/Sidebar.vue';
-import DashboardInicioPage from './DashboardInicioPage.vue';
 import DashboardCalendarPage from './DashboardCalendarPage.vue';
 const { routeSecurity } = useLogin();
 routeSecurity();

@@ -1,6 +1,6 @@
 import { ref } from "vue";
 import router from "../router";
-
+import { API } from "../services/API";
 // Obtener los valores almacenados en localStorage al cargar la página
 const isLog = ref(localStorage.getItem("isLog") === "true" || false);
 const isProfessor = ref(localStorage.getItem("isProfessor") === "true" || false);
@@ -20,8 +20,9 @@ if (localStorage.getItem("isStudent") === null) {
 }
 
 export default function useLogin(){
+    const { getUserLoginAPI } = API();
 
-    function login(email:String, password:String){
+    function login(email:string, password:string){
         // Lógica de inicio de sesión...
         //por ahora vamos a hacer que siempre iniciamos de estudiante
         isStudent.value = true;
@@ -30,7 +31,7 @@ export default function useLogin(){
         localStorage.setItem("isLog", isLog.value.toString());
         localStorage.setItem("isProfessor", isProfessor.value.toString());
         localStorage.setItem("isStudent", isStudent.value.toString());
-        router.push("/dashboard");
+        const user = getUserLoginAPI(email, password);
     }
 
     function logout(){

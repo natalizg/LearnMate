@@ -14,6 +14,7 @@
     "@fullcalendar/daygrid": "^6.1.13",
     "@fullcalendar/vue3": "^6.1.13",
     "@mdi/font": "^7.4.47",
+    "axios": "^1.7.2",
     "bootstrap": "^5.3.3",
     "vue": "^3.4.21",
     "vue-router": "^4.3.2"
