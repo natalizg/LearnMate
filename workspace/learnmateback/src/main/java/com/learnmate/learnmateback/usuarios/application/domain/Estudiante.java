@@ -1,5 +1,6 @@
 package com.learnmate.learnmateback.usuarios.application.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
@@ -20,6 +21,7 @@ public class Estudiante implements Serializable {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "ID_USUARIO", referencedColumnName = "ID_USUARIO")
+    @JsonIgnore
     private Usuario usuario;
     
 }

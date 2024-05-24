@@ -1,6 +1,5 @@
 package com.learnmate.learnmateback.usuarios.adapter.in.rest.model;
 
-import com.learnmate.learnmateback.usuarios.application.domain.Usuario;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -9,7 +8,5 @@ import lombok.Data;
 public class EstudianteDto {
 
     private Long idEstudiante;
-
-    private Usuario usuario;
 
 }
