@@ -9,10 +9,10 @@ public interface IUsuarioService {
 
     Usuario loginUser(String email, String password);
 
-    List<Usuario> getAlumnos(Long idProfesor);
+    List<Usuario> getAllAlumnosByidProfesor(Long idProfesor);
 
-    List<Usuario> getProfesores(Long idEstudiante);
+    List<Usuario> getAllProfesoresByIdEstudiante(Long idEstudiante);
 
-    List<Clase> getClases(Long idEstudiante, Long idProfesor);
+    List<Clase> getAllClasesByIdProfesorOrIdEstudiante(Long idEstudiante, Long idProfesor);
 
 }

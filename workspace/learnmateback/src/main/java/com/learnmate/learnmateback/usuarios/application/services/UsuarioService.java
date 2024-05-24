@@ -40,23 +40,23 @@ public class UsuarioService implements IUsuarioService {
             throw new IllegalArgumentException("La contraseña introducida es erronea");
         }
 
-        //Si existe un usuario registrado con el email introducido y la contraseña es correcta, devuelvo el uaurio
+        //Si existe un usuario registrado con el email introducido y la contraseña es correcta, devuelvo el usuario
         return usuario;
     }
 
-    public List<Usuario> getAlumnos(Long idProfesor) {
+    public List<Usuario> getAllAlumnosByidProfesor(Long idProfesor) {
 
         return claseRepository.findAllByProfesor_IdProfesor(idProfesor).stream().map(Clase::getEstudiante).toList()
                 .stream().map(Estudiante::getUsuario).toList();
     }
 
-    public List<Usuario> getProfesores(Long idEstudiante) {
+    public List<Usuario> getAllProfesoresByIdEstudiante(Long idEstudiante) {
 
         return claseRepository.findAllByEstudiante_IdEstudiante(idEstudiante).stream().map(Clase::getProfesor).toList()
                 .stream().map(Profesor::getUsuario).toList();
     }
 
-    public List<Clase> getClases(Long idEstudiante, Long idProfesor) {
+    public List<Clase> getAllClasesByIdProfesorOrIdEstudiante(Long idEstudiante, Long idProfesor) {
 
         return Optional.ofNullable(idEstudiante)
                 .map(estudianteId -> claseRepository.findAllByEstudiante_IdEstudiante(estudianteId))

@@ -68,10 +68,10 @@ public class UsuarioRestController {
             @ApiResponse(responseCode = "401", description = "No esta autorizado para realizar esta operacion"),
             @ApiResponse(responseCode = "403", description = "Acceso prohibido"),
             @ApiResponse(responseCode = "404", description = "No encontrado")})
-    @GetMapping("/getAlumnos")
-    public ResponseEntity<List<UsuarioDto>> getAlumnos(@RequestParam("idProfesor") Long idProfesor) {
+    @GetMapping("/getAllAlumnosByidProfesor")
+    public ResponseEntity<List<UsuarioDto>> getAllAlumnosByidProfesor(@RequestParam("idProfesor") Long idProfesor) {
 
-        List<UsuarioDto> usuariosOut = usuarioService.getAlumnos(idProfesor).stream()
+        List<UsuarioDto> usuariosOut = usuarioService.getAllAlumnosByidProfesor(idProfesor).stream()
                 .map(usuario -> modelMapper.map(usuario, UsuarioDto.class))
                 .collect(Collectors.toList());
 
@@ -90,10 +90,10 @@ public class UsuarioRestController {
             @ApiResponse(responseCode = "401", description = "No esta autorizado para realizar esta operacion"),
             @ApiResponse(responseCode = "403", description = "Acceso prohibido"),
             @ApiResponse(responseCode = "404", description = "No encontrado")})
-    @GetMapping("/getProfesores")
-    public ResponseEntity<List<UsuarioDto>> getProfesores(@RequestParam("idEstudiante") Long idEstudiante) {
+    @GetMapping("/getAllProfesoresByIdEstudiante")
+    public ResponseEntity<List<UsuarioDto>> getAllProfesoresByIdEstudiante(@RequestParam("idEstudiante") Long idEstudiante) {
 
-        List<UsuarioDto> usuariosOut = usuarioService.getProfesores(idEstudiante).stream()
+        List<UsuarioDto> usuariosOut = usuarioService.getAllProfesoresByIdEstudiante(idEstudiante).stream()
                 .map(usuario -> modelMapper.map(usuario, UsuarioDto.class))
                 .collect(Collectors.toList());
 
@@ -101,23 +101,24 @@ public class UsuarioRestController {
     }
 
     /**
-     * Servicio que devuelve todos los estudiantes de un profesor
+     * Servicio que devuelve todas las clases que tenga un profesor o un estudiante
      *
      * @param idEstudiante
      * @param idProfesor
      * @return List<ClaseDto>
      */
-    @Operation(summary = "Devuelve los profesores de un estudiante", description = "Este método se ultiliza para recuperar los datos de todos los profesores de un estudiante",
+    @Operation(summary = "Devuelve los profesores de un estudiante", description = "Este método se ultiliza para recuperar los de "+
+            "datos todas las clases que tenga un profesor o un estudiante",
             responses = {@ApiResponse(content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResponseEntity.class)))})
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK, obtenido correctamente"),
             @ApiResponse(responseCode = "401", description = "No esta autorizado para realizar esta operacion"),
             @ApiResponse(responseCode = "403", description = "Acceso prohibido"),
             @ApiResponse(responseCode = "404", description = "No encontrado")})
-    @GetMapping("/getClases")
-    public ResponseEntity<List<ClaseDto>> getClases(@RequestParam(value = "idEstudiante", required = false) Long idEstudiante,
-                                                    @RequestParam(value = "idProfesor", required = false) Long idProfesor) {
+    @GetMapping("/getAllClasesByIdProfesorOrIdEstudiante")
+    public ResponseEntity<List<ClaseDto>> getAllClasesByIdProfesorOrIdEstudiante(@RequestParam(value = "idEstudiante", required = false) Long idEstudiante,
+                                                                                 @RequestParam(value = "idProfesor", required = false) Long idProfesor) {
 
-        List<ClaseDto> clasesOut = usuarioService.getClases(idEstudiante, idProfesor).stream()
+        List<ClaseDto> clasesOut = usuarioService.getAllClasesByIdProfesorOrIdEstudiante(idEstudiante, idProfesor).stream()
                 .map(clase -> modelMapper.map(clase, ClaseDto.class))
                 .collect(Collectors.toList());
 
