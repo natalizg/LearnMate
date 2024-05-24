@@ -3,6 +3,7 @@
   <div class="panel">
     <Sidebar />
     <DashboardCalendarPage/>
+
   </div>
 </template>
 
