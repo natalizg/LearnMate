@@ -1,11 +1,7 @@
 package com.learnmate.learnmateback.usuarios.adapter.in.rest;
 
 import com.learnmate.learnmateback.usuarios.adapter.in.rest.model.ClaseDto;
-import com.learnmate.learnmateback.usuarios.adapter.in.rest.model.EstudianteDto;
-import com.learnmate.learnmateback.usuarios.adapter.in.rest.model.ProfesorDto;
 import com.learnmate.learnmateback.usuarios.adapter.in.rest.model.UsuarioDto;
-import com.learnmate.learnmateback.usuarios.application.domain.Estudiante;
-import com.learnmate.learnmateback.usuarios.application.domain.Usuario;
 import com.learnmate.learnmateback.usuarios.application.ports.in.IUsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -146,12 +142,12 @@ public class UsuarioRestController {
     }
 
     /**
-     * Servicio que crea un profesor o un estudiante y lo devuelve
+     * Servicio que crea una clase y la devuelve
      *
      * @param clase
      * @return ClaseDto
      */
-    @Operation(summary = "Crea profesores y estudiante", description = "Este método se ultiliza para crea un profesor o un estudiante y posteriormente lo devuelve",
+    @Operation(summary = "Crea profesores y estudiante", description = "Este método se ultiliza para crear una clase y la devolverla",
             responses = {@ApiResponse(content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResponseEntity.class)))})
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK, obtenido correctamente"),
             @ApiResponse(responseCode = "401", description = "No esta autorizado para realizar esta operacion"),
@@ -166,12 +162,32 @@ public class UsuarioRestController {
     }
 
     /**
-     * Servicio que crea un profesor o un estudiante y lo devuelve
+     * Servicio que actualiza los datos de una clase y la devuelve
+     *
+     * @param clase
+     * @return ClaseDto
+     */
+    @Operation(summary = "Crea profesores y estudiante", description = "Este método se ultiliza para actualizar los datos de una clase devolverla",
+            responses = {@ApiResponse(content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResponseEntity.class)))})
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK, obtenido correctamente"),
+            @ApiResponse(responseCode = "401", description = "No esta autorizado para realizar esta operacion"),
+            @ApiResponse(responseCode = "403", description = "Acceso prohibido"),
+            @ApiResponse(responseCode = "404", description = "No encontrado")})
+    @PutMapping("/updateClase")
+    public ResponseEntity<ClaseDto> updateClase(@RequestBody ClaseDto clase) {
+
+        ClaseDto claseOut = modelMapper.map(usuarioService.updateClase(clase), ClaseDto.class);
+
+        return new ResponseEntity<>(claseOut, HttpStatus.OK);
+    }
+
+    /**
+     * Servicio para borrar una clase
      *
      * @param idClase
      * @return HttpStatus
      */
-    @Operation(summary = "Crea profesores y estudiante", description = "Este método se ultiliza para crea un profesor o un estudiante y posteriormente lo devuelve",
+    @Operation(summary = "Crea profesores y estudiante", description = "Este método se ultiliza para para borrar una clase",
             responses = {@ApiResponse(content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResponseEntity.class)))})
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK, obtenido correctamente"),
             @ApiResponse(responseCode = "401", description = "No esta autorizado para realizar esta operacion"),

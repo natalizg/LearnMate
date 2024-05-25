@@ -134,6 +134,39 @@ public class UsuarioService implements IUsuarioService {
     }
 
     @Override
+    public Clase updateClase(ClaseDto clase) {
+
+        if (clase.getIdClase() == null) {
+            throw new IllegalArgumentException("El ID de la clase introducida no puede ser nulo");
+        }
+
+        // Recupera la clase existente desde el repositorio
+        Clase actualizarClase = claseRepository.findById(clase.getIdClase())
+                .orElseThrow(() -> new EntityNotFoundException("No existe ninguna clase con el ID: " + clase.getIdClase()));
+
+        Clase nuevaClase = modelMapper.map(clase, Clase.class);
+
+        // Rescato las entidades con los datos que trae el Dto
+        Estudiante estudiante = estudianteRepository.findById(clase.getEstudiante().getIdEstudiante())
+                .orElseThrow(() -> new EntityNotFoundException("El estudiante introducido no existe"));
+        Profesor profesor = profesorRepository.findById(clase.getProfesor().getIdProfesor())
+                .orElseThrow(() -> new EntityNotFoundException("El profesor introducido no existe"));
+        TramoHorario tramoHorario = tramoHorarioRepository.findById(clase.getTramoHorario().getIdTramoHorario())
+                .orElseThrow(() -> new EntityNotFoundException("El tramo horario seleccionado no existe"));
+        Materia materia = materiaRepository.findById(clase.getMateria().getIdMateria())
+                .orElseThrow(() -> new EntityNotFoundException("La materia seleccionada no existe"));
+
+        // Asigno las entidades rescatadas a la nueva Clase
+        actualizarClase.setEstudiante(estudiante);
+        actualizarClase.setProfesor(profesor);
+        actualizarClase.setTramoHorario(tramoHorario);
+        actualizarClase.setMateria(materia);
+
+        // Creo y devuelvo la nueva clase
+        return claseRepository.save(actualizarClase);
+    }
+
+    @Override
     public void deleteClase(Long idClase) {
 
         Optional<Clase> clase = claseRepository.findById(idClase);

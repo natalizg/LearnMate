@@ -21,6 +21,8 @@ public interface IUsuarioService {
 
     Clase createClase(ClaseDto clase);
 
+    Clase updateClase(ClaseDto clase);
+
     void deleteClase(Long idClase);
 
 }
