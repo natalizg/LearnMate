@@ -45,7 +45,6 @@ public class UsuarioRestController {
             @ApiResponse(responseCode = "401", description = "No esta autorizado para realizar esta operacion"),
             @ApiResponse(responseCode = "403", description = "Acceso prohibido"),
             @ApiResponse(responseCode = "404", description = "No encontrado")})
-    @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping("/loginUser")
     public ResponseEntity<UsuarioDto> loginUser(@RequestParam("email") String email, @RequestParam("password") String password) {
 
