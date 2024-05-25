@@ -2,6 +2,8 @@ package com.learnmate.learnmateback.usuarios.application.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
@@ -25,7 +27,8 @@ public class Profesor implements Serializable {
     private String descripcion;
 
     @Column(name="PRECIO", nullable = false)
-    @Length(max = 2)
+    @Min(1)
+    @Max(99)
     private Integer precio;
 
     @OneToOne(cascade = CascadeType.ALL)

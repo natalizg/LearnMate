@@ -1,5 +1,7 @@
 package com.learnmate.learnmateback.usuarios.application.ports.in;
 
+import com.learnmate.learnmateback.usuarios.adapter.in.rest.model.ClaseDto;
+import com.learnmate.learnmateback.usuarios.adapter.in.rest.model.UsuarioDto;
 import com.learnmate.learnmateback.usuarios.application.domain.Clase;
 import com.learnmate.learnmateback.usuarios.application.domain.Usuario;
 
@@ -14,5 +16,11 @@ public interface IUsuarioService {
     List<Usuario> getAllProfesoresByIdEstudiante(Long idEstudiante);
 
     List<Clase> getAllClasesByIdProfesorOrIdEstudiante(Long idEstudiante, Long idProfesor);
+
+    Usuario createUsuario(UsuarioDto usuario, String password);
+
+    Clase createClase(ClaseDto clase);
+
+    void deleteClase(Long idClase);
 
 }

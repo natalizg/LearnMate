@@ -21,15 +21,15 @@ public class Clase implements Serializable {
     @Column(name="FECHA", nullable = false)
     private Date fecha;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "ID_ESTUDIANTE", referencedColumnName = "ID_ESTUDIANTE")
     private Estudiante estudiante;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "ID_PROFESOR", referencedColumnName = "ID_PROFESOR")
     private Profesor profesor;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "ID_TRAMO_HORARIO", referencedColumnName = "ID_TRAMO_HORARIO")
     private TramoHorario tramoHorario;
 

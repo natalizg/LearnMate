@@ -1,12 +1,12 @@
 package com.learnmate.learnmateback.usuarios.application.services;
 
-import com.learnmate.learnmateback.usuarios.adapter.out.repositories.ClaseRepository;
-import com.learnmate.learnmateback.usuarios.adapter.out.repositories.UsuarioRepository;
-import com.learnmate.learnmateback.usuarios.application.domain.Clase;
-import com.learnmate.learnmateback.usuarios.application.domain.Estudiante;
-import com.learnmate.learnmateback.usuarios.application.domain.Profesor;
-import com.learnmate.learnmateback.usuarios.application.domain.Usuario;
+import com.learnmate.learnmateback.usuarios.adapter.in.rest.model.ClaseDto;
+import com.learnmate.learnmateback.usuarios.adapter.in.rest.model.UsuarioDto;
+import com.learnmate.learnmateback.usuarios.adapter.out.repositories.*;
+import com.learnmate.learnmateback.usuarios.application.domain.*;
 import com.learnmate.learnmateback.usuarios.application.ports.in.IUsuarioService;
+import jakarta.persistence.EntityNotFoundException;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +21,17 @@ public class UsuarioService implements IUsuarioService {
 
     @Autowired
     private ClaseRepository claseRepository;
+
+    @Autowired
+    private ModelMapper modelMapper;
+    @Autowired
+    private TramoHorarioRepository tramoHorarioRepository;
+    @Autowired
+    private EstudianteRepository estudianteRepository;
+    @Autowired
+    private ProfesorRepository profesorRepository;
+    @Autowired
+    private MateriaRepository materiaRepository;
 
     @Override
     public Usuario loginUser(String email, String password) {
@@ -63,6 +74,75 @@ public class UsuarioService implements IUsuarioService {
                 .orElseGet(() -> Optional.ofNullable(idProfesor)
                         .map(profesorId -> claseRepository.findAllByProfesor_IdProfesor(profesorId))
                         .orElse(null));
+    }
+
+    @Override
+    public Usuario createUsuario(UsuarioDto usuario, String password) {
+
+        // Compruebo si el correo introducido ya está registrado por otro usuario
+        if (usuarioRepository.findByEmail(usuario.getEmail()) != null) {
+            throw new IllegalArgumentException("El correo introducido ya está registrado");
+        }
+
+        Usuario nuevoUsuario = modelMapper.map(usuario, Usuario.class);
+        nuevoUsuario.setPassword(password);
+
+        // Compruebo si es un profesor o estudiante
+        if (usuario.getProfesor() != null) {
+            Profesor profesor = modelMapper.map(usuario.getProfesor(), Profesor.class);
+
+            //Rescato los tramos horarios y se los seteo al nuevo profesor
+            List<TramoHorario> tramosHorarios = tramoHorarioRepository.findAllById(usuario.getProfesor().getTramosHorarios().stream().map(TramoHorario::getIdTramoHorario).toList());
+            profesor.setTramosHorarios(tramosHorarios);
+
+            profesor.setUsuario(nuevoUsuario);
+            nuevoUsuario.setProfesor(profesor);
+        } else {
+            Estudiante estudiante = new Estudiante();
+
+            estudiante.setUsuario(nuevoUsuario);
+            nuevoUsuario.setEstudiante(estudiante);
+        }
+
+        //devuelvo el nuevo usuario creado
+        return usuarioRepository.save(nuevoUsuario);
+    }
+
+    @Override
+    public Clase createClase(ClaseDto clase) {
+
+        Clase nuevaClase = modelMapper.map(clase, Clase.class);
+
+        // Rescato las entidades con los datos que trae el Dto
+        Estudiante estudiante = estudianteRepository.findById(clase.getEstudiante().getIdEstudiante())
+                .orElseThrow(() -> new EntityNotFoundException("El estudiante introducido no existe"));
+        Profesor profesor = profesorRepository.findById(clase.getProfesor().getIdProfesor())
+                .orElseThrow(() -> new EntityNotFoundException("El profesor introducido no existe"));
+        TramoHorario tramoHorario = tramoHorarioRepository.findById(clase.getTramoHorario().getIdTramoHorario())
+                .orElseThrow(() -> new EntityNotFoundException("El tramo horario seleccionado no existe"));
+        Materia materia = materiaRepository.findById(clase.getMateria().getIdMateria())
+                .orElseThrow(() -> new EntityNotFoundException("La materia seleccionada no existe"));
+
+        // Asigno las entidades rescatadas a la nueva Clase
+        nuevaClase.setEstudiante(estudiante);
+        nuevaClase.setProfesor(profesor);
+        nuevaClase.setTramoHorario(tramoHorario);
+        nuevaClase.setMateria(materia);
+
+        // Creo y devuelvo la nueva clase
+        return claseRepository.save(nuevaClase);
+    }
+
+    @Override
+    public void deleteClase(Long idClase) {
+
+        Optional<Clase> clase = claseRepository.findById(idClase);
+
+        if (clase.isPresent()) {
+            claseRepository.delete(clase.get());
+        } else {
+            throw new EntityNotFoundException("La clase con id " + idClase + " no existe");
+        }
     }
 
 }
