@@ -33,13 +33,16 @@ onBeforeUnmount(() => {
     <div :class="{ 'top-nav': true, 'top-nav-yellow': navProps.bg }">
         <nav>
             <div class="left">
-                <router-link to="/"><img src="../assets/black-logo.png" alt="Logo"></router-link>
+                <router-link to="/dashboard"><img src="../assets/black-logo.png" alt="Logo"></router-link>
+                <div class="nav-bar">
+                    <router-link to="/buscar-profesores"><a href=""> Encontrar Profesores</a></router-link>
+                    <a href="">Contáctanos</a>
+                </div>
             </div>
             <div class="right">
-                <router-link to="/buscar-profesores"><a href="#">Buscar Profesores</a></router-link>
                 <div class="button-profile">
                     <button @click="openMenu">
-                        <img src="../assets/profesora3.png" alt="Perfil">
+                        <img src="../assets/user-standar.jpg" alt="Perfil">
                         <i :class="[showDropdown ? 'fa-chevron-up' : 'fa-chevron-down', 'fas', 'fa-xs', 'ml-2']"></i>
                     </button>
                     <ul v-if="showDropdown" id="dropdown-menu" class="dropdown-menu">
@@ -60,10 +63,21 @@ onBeforeUnmount(() => {
         justify-content: space-between;
         .left {
             display: flex;
-            margin-left: 20px;
+            margin-left: 50px;
             margin-top: 20px;
             img {
                 height: 35px;
+            }
+            .nav-bar{
+                margin-top: 10px;
+                margin-left:60px;
+                a{
+                    color:black;
+                    text-decoration: none;
+                    font-weight:600;
+                    margin-left:10px;
+                    margin-right: 10px;
+                }
             }
         }
         .right {
@@ -110,10 +124,11 @@ onBeforeUnmount(() => {
             border-radius: 5px;
             z-index: 1;
             li {
-                padding: 12px 16px;
+                padding: 12px 30px;
                 cursor: pointer;
                 &:hover {
                     background-color: #ffeda7;
+                    border-radius: 5px;
                 }
             }
             li a {

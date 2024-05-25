@@ -1,12 +1,14 @@
 import { ref } from "vue";
 import router from "../router";
 import { API } from "../services/API";
-// Obtener los valores almacenados en localStorage al cargar la página
+import { UserType } from "../types/UserType";
+
+// Obtener los valores almacenados en localStorage al cargar la página:
 const isLog = ref(localStorage.getItem("isLog") === "true" || false);
 const isProfessor = ref(localStorage.getItem("isProfessor") === "true" || false);
 const isStudent = ref(localStorage.getItem("isStudent") === "true" || false);
 
-// Verificar si los valores en localStorage existen
+// Verificar si los valores en localStorage existen:
 if (localStorage.getItem("isLog") === null) {
     localStorage.setItem("isLog", "false");
 }
@@ -20,18 +22,36 @@ if (localStorage.getItem("isStudent") === null) {
 }
 
 export default function useLogin(){
+
     const { getUserLoginAPI } = API();
 
-    function login(email:string, password:string){
-        // Lógica de inicio de sesión...
-        //por ahora vamos a hacer que siempre iniciamos de estudiante
-        isStudent.value = true;
-        isLog.value = true;
-        // Guardar los valores actualizados en localStorage
-        localStorage.setItem("isLog", isLog.value.toString());
-        localStorage.setItem("isProfessor", isProfessor.value.toString());
-        localStorage.setItem("isStudent", isStudent.value.toString());
-        const user = getUserLoginAPI(email, password);
+    async function login(email:string, password:string){
+
+        const user: UserType = await getUserLoginAPI(email, password);
+        
+        if (user) {
+
+            // Almacenar el usuario en localStorage
+            localStorage.setItem("user", JSON.stringify(user));
+            
+            // Configurar las variables según los datos del usuario
+            isStudent.value = user.estudiante !== null;
+            isProfessor.value = user.profesor !== null;
+            isLog.value = true;
+            
+            // Guardar los valores actualizados en localStorage
+            localStorage.setItem("isLog", isLog.value.toString());
+            localStorage.setItem("isProfessor", isProfessor.value.toString());
+            localStorage.setItem("isStudent", isStudent.value.toString());
+            
+            router.push("/dashboard")
+
+            console.table(user);
+            console.log("profesor: " + isProfessor.value)
+            console.log("estudiante" + isStudent.value)
+        } else {
+            console.error("Login failed: Invalid user data");
+        }
     }
 
     function logout(){

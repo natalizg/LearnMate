@@ -9,7 +9,6 @@
 <script setup lang="ts">
 import useLogin from '../composables/useLogin';
 import Sidebar from '../components/Sidebar.vue';
-import DashboardCalendarPage from './DashboardCalendarPage.vue';
 const { routeSecurity } = useLogin();
 routeSecurity();
 </script>

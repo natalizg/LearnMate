@@ -5,7 +5,7 @@
 <template>
     <div class="teacher-card">
         <div class="card">
-            <img src="../assets/asian-woman.jpg" alt="">
+            <img src="../assets/user-standar.jpg" alt="">
             <div class="card-content">
                 <div class="name-description">
                     <h2>Natalia Zg</h2>

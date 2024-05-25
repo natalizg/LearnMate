@@ -5,11 +5,11 @@
       <li class="perfil-container">
         <div class="perfil">
           <div class="img-profile">
-            <img src="../assets/profesora2.png" alt="">
+            <img src="../assets/user-standar.jpg" alt="">
           </div>
           <div class="perfil-data">
-            <h3>Natalia</h3>
-            <p>Estudiante</p>
+            <h3>{{user?.nombre}}</h3>
+            <p>{{rol}}</p>
           </div>
         </div>
       </li>
@@ -42,6 +42,25 @@
 </template>
 
 <script setup lang="ts">
+import useLogin from '../composables/useLogin';
+import { UserType } from '../types/UserType';
+import { ref } from 'vue';
+const { isStudent, isProfessor } = useLogin();
+const rol = ref('');
+if(isProfessor){
+  rol.value = 'Profesor'
+}
+if(isStudent){
+  rol.value = 'Estudiante'
+}
+
+const user = ref<UserType | null>(null);
+
+const storedUser = localStorage.getItem('user');
+
+if (storedUser) {
+  user.value = JSON.parse(storedUser) as UserType;
+}
 </script>
 
 <style scoped>

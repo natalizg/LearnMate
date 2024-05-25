@@ -1,3 +1,5 @@
+
+
 <template>
     <div class="row">
       <div class="col-12 grid-margin">
@@ -8,7 +10,7 @@
               <table class="table">
                 <thead>
                   <tr>
-                    <th> Profesor/Estudiante* </th>
+                    <th> {{text}} </th>
                     <th> Asignatura </th>
                     <th> Fecha </th>
                     <th> Hora </th>
@@ -17,7 +19,7 @@
                 <tbody>
                   <tr>
                     <td class="name">
-                      <img src="../assets/profesora3.png" class="me-2" alt="image"> <p>David Grey</p>
+                      <img src="../assets/user-standar.jpg" class="me-2" alt="image"> <p>David Grey</p>
                     </td>
                     <td class="asignatura"> <p>Química</p></td>
                     <td> 22/05/2024</td>
@@ -25,7 +27,7 @@
                   </tr>
                   <tr>
                     <td class="name">
-                      <img src="../assets/laptop-man-woman.jpg" class="me-2" alt="image">  <p> Stella Johnson</p>
+                      <img src="../assets/user-standar.jpg" class="me-2" alt="image">  <p> Stella Johnson</p>
                     </td>
                     <td class="asignatura"> <p>Historia</p> </td>
                     <td> 10/05/2024</td>
@@ -33,7 +35,7 @@
                   </tr>
                   <tr>
                     <td class="name">
-                      <img src="../assets/asian-woman.jpg" class="me-2" alt="image">  <p>Marina Michel</p>
+                      <img src="../assets/user-standar.jpg" class="me-2" alt="image">  <p>Marina Michel</p>
                     </td>
                     <td class="asignatura"> <p>Matemáticas</p> </td>
                     <td> 16/08/2024</td>
@@ -97,4 +99,14 @@
     }
   }
   </style>
+
+<script lang="ts" setup>
+import { DefineProps } from 'vue';
+
+defineProps({
+  text: String
+})
+
+
+</script>
   

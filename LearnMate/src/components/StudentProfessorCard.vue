@@ -6,7 +6,7 @@
     <div class="teacher-card">
         <div class="card">
             <div class="img">
-                <img src="../assets/profesora3.png" alt="">
+                <img src="../assets/user-standar.jpg" alt="">
             </div>
             <div class="card-content">
                 <div class="name-description">
