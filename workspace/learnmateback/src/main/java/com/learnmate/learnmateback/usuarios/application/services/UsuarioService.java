@@ -1,6 +1,8 @@
 package com.learnmate.learnmateback.usuarios.application.services;
 
 import com.learnmate.learnmateback.usuarios.adapter.in.rest.model.ClaseDto;
+import com.learnmate.learnmateback.usuarios.adapter.in.rest.model.ProfesorDto;
+import com.learnmate.learnmateback.usuarios.adapter.in.rest.model.ProfesorFilter;
 import com.learnmate.learnmateback.usuarios.adapter.in.rest.model.UsuarioDto;
 import com.learnmate.learnmateback.usuarios.adapter.out.repositories.*;
 import com.learnmate.learnmateback.usuarios.application.domain.*;
@@ -8,13 +10,24 @@ import com.learnmate.learnmateback.usuarios.application.ports.in.IUsuarioService
 import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.Predicate;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class UsuarioService implements IUsuarioService {
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Autowired
     private UsuarioRepository usuarioRepository;
@@ -23,18 +36,20 @@ public class UsuarioService implements IUsuarioService {
     private ClaseRepository claseRepository;
 
     @Autowired
-    private ModelMapper modelMapper;
-    @Autowired
     private TramoHorarioRepository tramoHorarioRepository;
+
     @Autowired
     private EstudianteRepository estudianteRepository;
+
     @Autowired
     private ProfesorRepository profesorRepository;
+
     @Autowired
     private MateriaRepository materiaRepository;
 
+
     @Override
-    public Usuario loginUser(String email, String password) {
+    public Usuario loginUsuario(String email, String password) {
 
         // Intento rescatar al usuario mediante el email
         Usuario usuario = usuarioRepository.findByEmail(email);
@@ -91,7 +106,7 @@ public class UsuarioService implements IUsuarioService {
         if (usuario.getProfesor() != null) {
             Profesor profesor = modelMapper.map(usuario.getProfesor(), Profesor.class);
 
-            //Rescato los tramos horarios y se los seteo al nuevo profesor
+            // Rescato los tramos horarios y se los asigno al nuevo profesor
             List<TramoHorario> tramosHorarios = tramoHorarioRepository.findAllById(usuario.getProfesor().getTramosHorarios().stream().map(TramoHorario::getIdTramoHorario).toList());
             profesor.setTramosHorarios(tramosHorarios);
 
@@ -104,40 +119,46 @@ public class UsuarioService implements IUsuarioService {
             nuevoUsuario.setEstudiante(estudiante);
         }
 
-        //devuelvo el nuevo usuario creado
+        // Devuelvo el nuevo usuario creado
         return usuarioRepository.save(nuevoUsuario);
     }
 
     @Override
     public Usuario updateUsuario(UsuarioDto usuario, String password) {
 
-        // Compruebo si el correo introducido ya está registrado por otro usuario
-        if (usuarioRepository.findByEmail(usuario.getEmail()) != null) {
-            throw new IllegalArgumentException("El correo introducido ya está registrado");
-        } 
+        if (usuario.getIdUsuario() == null) {
+            throw new IllegalArgumentException("El ID del usuario introducido no puede ser nulo");
+        }
 
-        Usuario nuevoUsuario = modelMapper.map(usuario, Usuario.class);
-        nuevoUsuario.setPassword(password);
+        // Verifico si el usuario existe e intento rescatarlo
+        Usuario actualizarUsuario = usuarioRepository.findById(usuario.getIdUsuario())
+                .orElseThrow(() -> new EntityNotFoundException("No existe ningun usuario con el ID: " + usuario.getIdUsuario()));
 
-        // Compruebo si es un profesor o estudiante
+        // Mapeao los cambios desde el usuario recibido al almacenado en la bbdd existente
+        modelMapper.map(usuario, actualizarUsuario);
+        actualizarUsuario.setPassword(password);
+
+        // Verifico si el usuario es un profesor
         if (usuario.getProfesor() != null) {
             Profesor profesor = modelMapper.map(usuario.getProfesor(), Profesor.class);
 
-            //Rescato los tramos horarios y se los seteo al nuevo profesor
-            List<TramoHorario> tramosHorarios = tramoHorarioRepository.findAllById(usuario.getProfesor().getTramosHorarios().stream().map(TramoHorario::getIdTramoHorario).toList());
+            // Rescato los tramos horarios y se los asigno al profesor
+            List<TramoHorario> tramosHorarios = tramoHorarioRepository.findAllById(
+                    usuario.getProfesor().getTramosHorarios().stream().map(TramoHorario::getIdTramoHorario).toList()
+            );
             profesor.setTramosHorarios(tramosHorarios);
 
-            profesor.setUsuario(nuevoUsuario);
-            nuevoUsuario.setProfesor(profesor);
+            profesor.setUsuario(actualizarUsuario);
+            actualizarUsuario.setProfesor(profesor);
         } else {
-            Estudiante estudiante = new Estudiante();
+            Estudiante estudiante = modelMapper.map(usuario.getEstudiante(), Estudiante.class);
 
-            estudiante.setUsuario(nuevoUsuario);
-            nuevoUsuario.setEstudiante(estudiante);
+            estudiante.setUsuario(actualizarUsuario);
+            actualizarUsuario.setEstudiante(estudiante);
         }
 
-        //devuelvo el nuevo usuario creado
-        return usuarioRepository.save(nuevoUsuario);
+        // Guardo los cambios y devuelvo el usuario actualizado
+        return usuarioRepository.save(actualizarUsuario);
     }
 
     @Override
@@ -208,6 +229,58 @@ public class UsuarioService implements IUsuarioService {
         } else {
             throw new EntityNotFoundException("La clase con id " + idClase + " no existe");
         }
+    }
+
+    @Override
+    public List<Materia> getAllMaterias() {
+        return materiaRepository.findAll();
+    }
+
+    @Override
+    public List<TramoHorario> getAllTramosHorarios() {
+        return tramoHorarioRepository.findAll();
+    }
+
+    @Override
+    public Page<UsuarioDto> getAllProfesores(ProfesorFilter filter, Pageable pageable) {
+
+        Specification<Profesor> spec = (root, query, cb) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            if (filter.getNombre() != null) {
+                String nombreLower = "%" + filter.getNombre().toLowerCase() + "%";
+
+                Predicate nombrePredicate = cb.like(cb.lower(root.get("usuario").get("nombre")), nombreLower);
+                Predicate apellidosPredicate = cb.like(cb.lower(root.get("usuario").get("apellidos")), nombreLower);
+
+                predicates.add(cb.or(nombrePredicate, apellidosPredicate));
+            }
+            if (filter.getPrecioMin() != null) {
+                predicates.add(cb.greaterThanOrEqualTo(root.get("precio"), filter.getPrecioMin()));
+            }
+            if (filter.getPrecioMax() != null) {
+                predicates.add(cb.lessThanOrEqualTo(root.get("precio"), filter.getPrecioMax()));
+            }
+            if (filter.getIdMateria() != null) {
+                predicates.add(cb.equal(root.get("materia").get("idMateria"), filter.getIdMateria()));
+            }
+            if (filter.getIdsTramosHorarios() != null && !filter.getIdsTramosHorarios().isEmpty()) {
+                Join<Profesor, TramoHorario> join = root.join("tramosHorarios", JoinType.INNER);
+
+                predicates.add(join.get("idTramoHorario").in(filter.getIdsTramosHorarios()));
+            }
+
+            return cb.and(predicates.toArray(new Predicate[0]));
+        };
+
+        Page<Profesor> profesores = profesorRepository.findAll(spec, pageable);
+
+        return profesores.map(profesor -> {
+            UsuarioDto usuarioDto = modelMapper.map(profesor.getUsuario(), UsuarioDto.class);
+            ProfesorDto profesorDto = modelMapper.map(profesor, ProfesorDto.class);
+            usuarioDto.setProfesor(profesorDto);
+            return usuarioDto;
+        });
     }
 
 }
