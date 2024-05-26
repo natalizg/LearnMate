@@ -33,7 +33,8 @@ const showHideP = () => {
             <img class="first" src="../assets/videocall2.png" height="450px" alt="VideoLlamada">
         </div>
     </div>
-
+    <div class="filter-container">
+    </div>
     <div class="teachers">
         <TeacherCardComponent/>
         <TeacherCardComponent/>
@@ -86,6 +87,10 @@ const showHideP = () => {
             margin-left:100px;
             margin-right:350px;
         }
+    }
+    .filter-container{
+        margin-top:300px;
+        margin-bottom:100px;
     }
     .teachers{
         margin-top:100px;
