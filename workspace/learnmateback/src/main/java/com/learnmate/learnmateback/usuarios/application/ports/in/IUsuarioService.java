@@ -1,15 +1,18 @@
 package com.learnmate.learnmateback.usuarios.application.ports.in;
 
 import com.learnmate.learnmateback.usuarios.adapter.in.rest.model.ClaseDto;
+import com.learnmate.learnmateback.usuarios.adapter.in.rest.model.ProfesorFilter;
 import com.learnmate.learnmateback.usuarios.adapter.in.rest.model.UsuarioDto;
-import com.learnmate.learnmateback.usuarios.application.domain.Clase;
-import com.learnmate.learnmateback.usuarios.application.domain.Usuario;
+import com.learnmate.learnmateback.usuarios.application.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface IUsuarioService {
 
-    Usuario loginUser(String email, String password);
+    Usuario loginUsuario(String email, String password);
 
     List<Usuario> getAllEstudiantesByidProfesor(Long idProfesor);
 
@@ -26,5 +29,11 @@ public interface IUsuarioService {
     Clase updateClase(ClaseDto clase);
 
     void deleteClase(Long idClase);
+
+    List<Materia> getAllMaterias();
+
+    List<TramoHorario> getAllTramosHorarios();
+
+    Page<UsuarioDto> getAllProfesores(ProfesorFilter filter, Pageable pageable);
 
 }

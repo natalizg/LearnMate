@@ -14,7 +14,8 @@ public class TramoHorario implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SeqGenTramoHorario")
+    @SequenceGenerator(name = "SeqGenTramoHorario", sequenceName = "SQ_TRAMOS_HORARIOS", allocationSize = 1)
     @Column(name="ID_TRAMO_HORARIO", nullable = false)
     private Long idTramoHorario;
 

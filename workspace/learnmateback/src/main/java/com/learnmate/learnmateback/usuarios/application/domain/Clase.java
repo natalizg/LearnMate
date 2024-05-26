@@ -14,7 +14,8 @@ public class Clase implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SeqGenClase")
+    @SequenceGenerator(name = "SeqGenClase", sequenceName = "SQ_CLASES", allocationSize = 1)
     @Column(name="ID_CLASE", nullable = false)
     private Long idClase;
 

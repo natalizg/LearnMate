@@ -1,7 +1,6 @@
 package com.learnmate.learnmateback.usuarios.adapter.in.rest;
 
-import com.learnmate.learnmateback.usuarios.adapter.in.rest.model.ClaseDto;
-import com.learnmate.learnmateback.usuarios.adapter.in.rest.model.UsuarioDto;
+import com.learnmate.learnmateback.usuarios.adapter.in.rest.model.*;
 import com.learnmate.learnmateback.usuarios.application.ports.in.IUsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -10,6 +9,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,11 +43,11 @@ public class UsuarioRestController {
             @ApiResponse(responseCode = "401", description = "No esta autorizado para realizar esta operacion"),
             @ApiResponse(responseCode = "403", description = "Acceso prohibido"),
             @ApiResponse(responseCode = "404", description = "No encontrado")})
-    @GetMapping("/loginUser")
-    public ResponseEntity<UsuarioDto> loginUser(@RequestParam("email") String email,
+    @GetMapping("/loginUsuario")
+    public ResponseEntity<UsuarioDto> loginUsuario(@RequestParam("email") String email,
                                                 @RequestParam("password") String password) {
 
-        UsuarioDto usuarioOut = modelMapper.map(usuarioService.loginUser(email, password), UsuarioDto.class);
+        UsuarioDto usuarioOut = modelMapper.map(usuarioService.loginUsuario(email, password), UsuarioDto.class);
 
         return new ResponseEntity<>(usuarioOut, HttpStatus.OK);
     }
@@ -155,7 +157,7 @@ public class UsuarioRestController {
             @ApiResponse(responseCode = "401", description = "No esta autorizado para realizar esta operacion"),
             @ApiResponse(responseCode = "403", description = "Acceso prohibido"),
             @ApiResponse(responseCode = "404", description = "No encontrado")})
-    @PostMapping("/updateUsuario")
+    @PutMapping("/updateUsuario")
     public ResponseEntity<UsuarioDto> updateUsuario(@RequestParam("password") String password,
                                                     @RequestBody UsuarioDto usuario) {
 
@@ -222,6 +224,84 @@ public class UsuarioRestController {
         usuarioService.deleteClase(idClase);
 
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    /**
+     * Servicio para rescatar todas las materias
+     *
+     * @return List<MateriaDto>
+     */
+    @Operation(summary = "Rescata todas las materias", description = "Este método se ultiliza para rescatar todas las materias",
+            responses = {@ApiResponse(content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResponseEntity.class)))})
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK, obtenido correctamente"),
+            @ApiResponse(responseCode = "401", description = "No esta autorizado para realizar esta operacion"),
+            @ApiResponse(responseCode = "403", description = "Acceso prohibido"),
+            @ApiResponse(responseCode = "404", description = "No encontrado")})
+    @GetMapping("/getAllMaterias")
+    public ResponseEntity<List<MateriaDto>> getAllMaterias() {
+
+        List<MateriaDto> materiasOut = usuarioService.getAllMaterias().stream()
+                .map(materia -> modelMapper.map(materia, MateriaDto.class))
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(materiasOut, HttpStatus.OK);
+    }
+
+    /**
+     * Servicio para rescatar todos los tramos horarios
+     *
+     * @return List<TramoHorarioDto>
+     */
+    @Operation(summary = "Rescata todos los tramos horarios", description = "Este método se ultiliza para rescatar todos los tramos horarios",
+            responses = {@ApiResponse(content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResponseEntity.class)))})
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK, obtenido correctamente"),
+            @ApiResponse(responseCode = "401", description = "No esta autorizado para realizar esta operacion"),
+            @ApiResponse(responseCode = "403", description = "Acceso prohibido"),
+            @ApiResponse(responseCode = "404", description = "No encontrado")})
+    @GetMapping("/getAllTramosHorarios")
+    public ResponseEntity<List<TramoHorarioDto>> getAllTramosHorarios() {
+
+        List<TramoHorarioDto> tramoHorarioOut = usuarioService.getAllTramosHorarios().stream()
+                .map(tramoHorario -> modelMapper.map(tramoHorario, TramoHorarioDto.class))
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(tramoHorarioOut, HttpStatus.OK);
+    }
+
+    /**
+     * Servicio para rescatar todos los profesores en función de los filtros recibidos
+     *
+     * @return List<ProfesorDto>
+     */
+    @Operation(summary = "Rescata todos los profesores", description = "Este método se ultiliza para rescatar todos los profesores en función " +
+            "de los filtros recibidos",
+            responses = {@ApiResponse(content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResponseEntity.class)))})
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK, obtenido correctamente"),
+            @ApiResponse(responseCode = "401", description = "No esta autorizado para realizar esta operacion"),
+            @ApiResponse(responseCode = "403", description = "Acceso prohibido"),
+            @ApiResponse(responseCode = "404", description = "No encontrado")})
+    @GetMapping("/getAllProfesores")
+    public ResponseEntity<Page<UsuarioDto>> getAllProfesores(
+            @RequestParam(required = false) String nombre,
+            @RequestParam(required = false) Integer precioMin,
+            @RequestParam(required = false) Integer precioMax,
+            @RequestParam(required = false) Long idMateria,
+            @RequestParam(required = false) List<Long> idsTramosHorarios,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        ProfesorFilter filter = new ProfesorFilter();
+        filter.setNombre(nombre);
+        filter.setPrecioMin(precioMin);
+        filter.setPrecioMax(precioMax);
+        filter.setIdMateria(idMateria);
+        filter.setIdsTramosHorarios(idsTramosHorarios);
+
+        Page<UsuarioDto> profesoresOut = usuarioService.getAllProfesores(filter, pageable);
+
+        return new ResponseEntity<>(profesoresOut, HttpStatus.OK);
     }
 
 }

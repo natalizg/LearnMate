@@ -18,7 +18,8 @@ public class Profesor implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SeqGenProfesor")
+    @SequenceGenerator(name = "SeqGenProfesor", sequenceName = "SQ_PROFESORES", allocationSize = 1)
     @Column(name="ID_PROFESOR", nullable = false)
     private Long idProfesor;
 
