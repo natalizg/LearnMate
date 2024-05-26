@@ -271,7 +271,14 @@ public class UsuarioRestController {
     /**
      * Servicio para rescatar todos los profesores en función de los filtros recibidos
      *
-     * @return List<ProfesorDto>
+     * @param nombre
+     * @param precioMin
+     * @param precioMax
+     * @param idMateria
+     * @param idsTramosHorarios
+     * @param page
+     * @param size
+     * @return Page<UsuarioDto>
      */
     @Operation(summary = "Rescata todos los profesores", description = "Este método se ultiliza para rescatar todos los profesores en función " +
             "de los filtros recibidos",
