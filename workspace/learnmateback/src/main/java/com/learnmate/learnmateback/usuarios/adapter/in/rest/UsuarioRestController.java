@@ -56,16 +56,16 @@ public class UsuarioRestController {
      * @param idProfesor
      * @return List<UsuarioDto>
      */
-    @Operation(summary = "Devuelve los estudiantes de un profesor", description = "Este método se ultiliza para recuperar los datos de todos los alumnos de un profesor",
+    @Operation(summary = "Devuelve los estudiantes de un profesor", description = "Este método se ultiliza para recuperar los datos de todos los estudiantes de un profesor",
             responses = {@ApiResponse(content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResponseEntity.class)))})
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK, obtenido correctamente"),
             @ApiResponse(responseCode = "401", description = "No esta autorizado para realizar esta operacion"),
             @ApiResponse(responseCode = "403", description = "Acceso prohibido"),
             @ApiResponse(responseCode = "404", description = "No encontrado")})
-    @GetMapping("/getAllAlumnosByidProfesor")
-    public ResponseEntity<List<UsuarioDto>> getAllAlumnosByidProfesor(@RequestParam("idProfesor") Long idProfesor) {
+    @GetMapping("/getAllEstudiantesByidProfesor")
+    public ResponseEntity<List<UsuarioDto>> getAllEstudiantesByidProfesor(@RequestParam("idProfesor") Long idProfesor) {
 
-        List<UsuarioDto> usuariosOut = usuarioService.getAllAlumnosByidProfesor(idProfesor).stream()
+        List<UsuarioDto> usuariosOut = usuarioService.getAllEstudiantesByidProfesor(idProfesor).stream()
                 .map(usuario -> modelMapper.map(usuario, UsuarioDto.class))
                 .collect(Collectors.toList());
 
@@ -137,6 +137,29 @@ public class UsuarioRestController {
                                                     @RequestBody UsuarioDto usuario) {
 
         UsuarioDto usuarioOut = modelMapper.map(usuarioService.createUsuario(usuario, password), UsuarioDto.class);
+
+        return new ResponseEntity<>(usuarioOut, HttpStatus.CREATED);
+    }
+
+    /**
+     * Servicio que actgualiza los datos de un profesor o un estudiante y lo devuelve
+     *
+     * @param usuario
+     * @param password
+     * @return UsuarioDto
+     */
+    @Operation(summary = "Crea profesores y estudiante", description = "Este método se ultiliza para ctualizar los datos " +
+            "de un profesor o un estudiante y posteriormente lo devuelve",
+            responses = {@ApiResponse(content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResponseEntity.class)))})
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK, obtenido correctamente"),
+            @ApiResponse(responseCode = "401", description = "No esta autorizado para realizar esta operacion"),
+            @ApiResponse(responseCode = "403", description = "Acceso prohibido"),
+            @ApiResponse(responseCode = "404", description = "No encontrado")})
+    @PostMapping("/updateUsuario")
+    public ResponseEntity<UsuarioDto> updateUsuario(@RequestParam("password") String password,
+                                                    @RequestBody UsuarioDto usuario) {
+
+        UsuarioDto usuarioOut = modelMapper.map(usuarioService.updateUsuario(usuario, password), UsuarioDto.class);
 
         return new ResponseEntity<>(usuarioOut, HttpStatus.CREATED);
     }

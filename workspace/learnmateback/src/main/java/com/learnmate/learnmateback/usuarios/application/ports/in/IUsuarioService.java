@@ -11,13 +11,15 @@ public interface IUsuarioService {
 
     Usuario loginUser(String email, String password);
 
-    List<Usuario> getAllAlumnosByidProfesor(Long idProfesor);
+    List<Usuario> getAllEstudiantesByidProfesor(Long idProfesor);
 
     List<Usuario> getAllProfesoresByIdEstudiante(Long idEstudiante);
 
     List<Clase> getAllClasesByIdProfesorOrIdEstudiante(Long idEstudiante, Long idProfesor);
 
     Usuario createUsuario(UsuarioDto usuario, String password);
+
+    Usuario updateUsuario(UsuarioDto usuario, String password);
 
     Clase createClase(ClaseDto clase);
 

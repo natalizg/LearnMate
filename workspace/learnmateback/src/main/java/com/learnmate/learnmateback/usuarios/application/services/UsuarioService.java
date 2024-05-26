@@ -55,7 +55,7 @@ public class UsuarioService implements IUsuarioService {
         return usuario;
     }
 
-    public List<Usuario> getAllAlumnosByidProfesor(Long idProfesor) {
+    public List<Usuario> getAllEstudiantesByidProfesor(Long idProfesor) {
 
         return claseRepository.findAllByProfesor_IdProfesor(idProfesor).stream().map(Clase::getEstudiante).toList()
                 .stream().map(Estudiante::getUsuario).toList();
@@ -83,6 +83,38 @@ public class UsuarioService implements IUsuarioService {
         if (usuarioRepository.findByEmail(usuario.getEmail()) != null) {
             throw new IllegalArgumentException("El correo introducido ya está registrado");
         }
+
+        Usuario nuevoUsuario = modelMapper.map(usuario, Usuario.class);
+        nuevoUsuario.setPassword(password);
+
+        // Compruebo si es un profesor o estudiante
+        if (usuario.getProfesor() != null) {
+            Profesor profesor = modelMapper.map(usuario.getProfesor(), Profesor.class);
+
+            //Rescato los tramos horarios y se los seteo al nuevo profesor
+            List<TramoHorario> tramosHorarios = tramoHorarioRepository.findAllById(usuario.getProfesor().getTramosHorarios().stream().map(TramoHorario::getIdTramoHorario).toList());
+            profesor.setTramosHorarios(tramosHorarios);
+
+            profesor.setUsuario(nuevoUsuario);
+            nuevoUsuario.setProfesor(profesor);
+        } else {
+            Estudiante estudiante = new Estudiante();
+
+            estudiante.setUsuario(nuevoUsuario);
+            nuevoUsuario.setEstudiante(estudiante);
+        }
+
+        //devuelvo el nuevo usuario creado
+        return usuarioRepository.save(nuevoUsuario);
+    }
+
+    @Override
+    public Usuario updateUsuario(UsuarioDto usuario, String password) {
+
+        // Compruebo si el correo introducido ya está registrado por otro usuario
+        if (usuarioRepository.findByEmail(usuario.getEmail()) != null) {
+            throw new IllegalArgumentException("El correo introducido ya está registrado");
+        } 
 
         Usuario nuevoUsuario = modelMapper.map(usuario, Usuario.class);
         nuevoUsuario.setPassword(password);
