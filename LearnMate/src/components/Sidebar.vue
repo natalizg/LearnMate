@@ -47,10 +47,10 @@ import { UserType } from '../types/UserType';
 import { ref } from 'vue';
 const { isStudent, isProfessor } = useLogin();
 const rol = ref('');
-if(isProfessor){
+if(isProfessor.value){
   rol.value = 'Profesor'
 }
-if(isStudent){
+if(isStudent.value){
   rol.value = 'Estudiante'
 }
 

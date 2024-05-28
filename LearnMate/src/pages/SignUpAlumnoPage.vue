@@ -23,6 +23,15 @@
                     <input type="text" id="apellidos" v-model="apellidos" required placeholder="Tus Apellidos">
                 </div>
                 <div class="form-group">
+                    <label for="telefono">Teléfono</label>
+                    <div class="phone-container">
+                        <input type="text" id="telefono" v-model="telefono" required placeholder="+34 695 337 520" />
+                        <div class="phone-flag">
+                            <img src="../assets/spain.png" alt="flag" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label for="email">Correo Electrónico</label>
                     <input type="email" id="email" v-model="email" required placeholder="Tu correo electrónico">
                 </div>
@@ -49,13 +58,20 @@
   </template>
   
   <script setup lang="ts">
+
     import { ref } from 'vue';
     import showIcon from '../assets/eye.png';
     import hideIcon from '../assets/hidden.png';
+    import { PostStudent } from '../types/PostUserType/PostStudentType';
+    import useLogin from '../composables/useLogin';
+
+    const { signStudent } = useLogin();
     const email = ref('');
     const password = ref('');
     const nombre = ref('');
     const apellidos = ref('');
+    const telefono = ref('');
+
     const passwordFieldType = ref<'password' | 'text'>('password');
   
     const togglePasswordVisibility = () => {
@@ -63,11 +79,15 @@
     };
   
     const handleSubmit = () => {
-        console.log('Email:', email.value);
-        console.log('Password:', password.value);
-        console.log('Nombre:', nombre.value);
-        console.log('Apellidos:', apellidos.value)
-        // Aquí puedes agregar la lógica de autenticación
+        const newUser: PostStudent = {
+            email: email.value,
+            nombre: nombre.value,
+            apellidos: apellidos.value,
+            telefono: parseInt(telefono.value),
+            profesor: null,
+            estudiante: null
+        }
+        signStudent(newUser, password.value);
     };
 
 
@@ -218,6 +238,20 @@
           width: 20px;
           height: 20px;
         }
+      }
+      .phone-container {
+        position: relative;
+
+        input {
+          padding-left: 40px;
+        }
+      }
+
+      .phone-flag {
+        position: absolute;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
       }
     }
   

@@ -54,7 +54,7 @@ if (isStudent.value) {
   flex-grow: 1;
   padding: 20px;
   background-color: #f2edf3;
-
+  padding-bottom:150px;
   .component-name {
     display: flex;
     align-items: center;
@@ -88,7 +88,7 @@ if (isStudent.value) {
     }
   }
   .row-clases {
-    margin-top: 50px;
+    margin-top: 60px;
   }
 }
 </style>

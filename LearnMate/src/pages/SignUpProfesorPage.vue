@@ -46,7 +46,7 @@
     import showIcon from '../assets/eye.png';
     import hideIcon from '../assets/hidden.png';
 
-    const { signProfessor } = useLogin()
+    const { sendProfessor } = useLogin()
     const email = ref('');
     const password = ref('');
     const passwordFieldType = ref<'password' | 'text'>('password');
@@ -56,8 +56,7 @@
     };
   
     const handleSubmit = () => {
-        // Aquí puedes agregar la lógica de autenticación
-        signProfessor(email.value, password.value);
+        sendProfessor(email.value, password.value);
     };
 
 
