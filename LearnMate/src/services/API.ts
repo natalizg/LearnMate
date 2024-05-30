@@ -20,9 +20,16 @@ export function API(){
         return response.data
     }
 
+    const getFilteredProfessor = async (precioMin:number, precioMax:number, materia:number, disponibilidad:string) => {
+        const response = await axios.get(`${API_URL}/usuarios/getAllProfesores?precioMin=${precioMin}&precioMax=${precioMax}&idMateria=${materia}&idsTramosHorarios=${disponibilidad}`);
+        return response.data;
+    }
+
+
     return{
         getUserLoginAPI,
         createUser,
-        createStudent
+        createStudent,
+        getFilteredProfessor
     }
 }
