@@ -17,11 +17,13 @@ import org.springframework.stereotype.Service;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UsuarioService implements IUsuarioService {
@@ -176,6 +178,16 @@ public class UsuarioService implements IUsuarioService {
     }
 
     @Override
+    public Usuario setFotoUsuario(Long idUsuario, MultipartFile foto) throws IOException {
+
+        Usuario usuario = usuarioRepository.findById(idUsuario).orElseThrow(() -> new EntityNotFoundException("el id del usuario introducido no existe"));
+
+        usuario.setFoto(foto.getBytes());
+
+        return usuarioRepository.save(usuario);
+    }
+
+    @Override
     public ClaseDto createClase(ClaseDto clase) {
 
         Clase nuevaClase = modelMapper.map(clase, Clase.class);
@@ -210,8 +222,6 @@ public class UsuarioService implements IUsuarioService {
         // Recupera la clase existente desde el repositorio
         Clase actualizarClase = claseRepository.findById(clase.getIdClase())
                 .orElseThrow(() -> new EntityNotFoundException("No existe ninguna clase con el ID: " + clase.getIdClase()));
-
-        Clase nuevaClase = modelMapper.map(clase, Clase.class);
 
         // Rescato las entidades con los datos que trae el Dto
         Estudiante estudiante = estudianteRepository.findById(clase.getEstudiante().getIdEstudiante())

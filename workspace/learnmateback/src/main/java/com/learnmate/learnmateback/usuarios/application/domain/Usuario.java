@@ -43,6 +43,9 @@ public class Usuario implements Serializable {
     @Length(max = 1000)
     private String password;
 
+    @Column(name="FOTO")
+    private byte[] foto;
+
     @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Estudiante estudiante;
 

@@ -17,6 +17,8 @@ public class UsuarioDto {
 
     private Integer telefono;
 
+    private byte[] foto;
+
     private ProfesorDto profesor;
 
     private EstudianteDto estudiante;

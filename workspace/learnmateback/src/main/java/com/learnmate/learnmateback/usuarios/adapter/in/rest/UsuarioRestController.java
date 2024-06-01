@@ -15,7 +15,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -158,6 +160,28 @@ public class UsuarioRestController {
                                                     @RequestBody UsuarioDto usuario) {
 
         UsuarioDto usuarioOut = modelMapper.map(usuarioService.updateUsuario(usuario, password), UsuarioDto.class);
+
+        return new ResponseEntity<>(usuarioOut, HttpStatus.CREATED);
+    }
+
+    /**
+     * Servicio que actualiza la foto de un usuario
+     *
+     * @param idUsuario
+     * @param foto
+     * @return UsuarioDto
+     */
+    @Operation(summary = "Actualiza la foto de un usuario", description = "Este método se ultiliza para crea o actualizar la foto de un usuario",
+            responses = {@ApiResponse(content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResponseEntity.class)))})
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK, obtenido correctamente"),
+            @ApiResponse(responseCode = "401", description = "No esta autorizado para realizar esta operacion"),
+            @ApiResponse(responseCode = "403", description = "Acceso prohibido"),
+            @ApiResponse(responseCode = "404", description = "No encontrado")})
+    @PutMapping("/setFotoUsuario")
+    public ResponseEntity<UsuarioDto> setFotoUsuario(@RequestParam("idUsuario") Long idUsuario,
+                                                     @RequestBody MultipartFile foto) throws IOException {
+
+        UsuarioDto usuarioOut = modelMapper.map(usuarioService.setFotoUsuario(idUsuario, foto), UsuarioDto.class);
 
         return new ResponseEntity<>(usuarioOut, HttpStatus.CREATED);
     }
