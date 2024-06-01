@@ -114,11 +114,7 @@ public class UsuarioRestController {
     public ResponseEntity<List<ClaseDto>> getAllClasesByIdProfesorOrIdEstudiante(@RequestParam(value = "idEstudiante", required = false) Long idEstudiante,
                                                                                  @RequestParam(value = "idProfesor", required = false) Long idProfesor) {
 
-        List<ClaseDto> clasesOut = usuarioService.getAllClasesByIdProfesorOrIdEstudiante(idEstudiante, idProfesor).stream()
-                .map(clase -> modelMapper.map(clase, ClaseDto.class))
-                .collect(Collectors.toList());
-
-        return new ResponseEntity<>(clasesOut, HttpStatus.OK);
+        return new ResponseEntity<>(usuarioService.getAllClasesByIdProfesorOrIdEstudiante(idEstudiante, idProfesor), HttpStatus.OK);
     }
 
     /**
@@ -181,9 +177,7 @@ public class UsuarioRestController {
     @PostMapping("/createClase")
     public ResponseEntity<ClaseDto> createClase(@RequestBody ClaseDto clase) {
 
-        ClaseDto claseOut = modelMapper.map(usuarioService.createClase(clase), ClaseDto.class);
-
-        return new ResponseEntity<>(claseOut, HttpStatus.CREATED);
+        return new ResponseEntity<>(usuarioService.createClase(clase), HttpStatus.CREATED);
     }
 
     /**
@@ -201,9 +195,7 @@ public class UsuarioRestController {
     @PutMapping("/updateClase")
     public ResponseEntity<ClaseDto> updateClase(@RequestBody ClaseDto clase) {
 
-        ClaseDto claseOut = modelMapper.map(usuarioService.updateClase(clase), ClaseDto.class);
-
-        return new ResponseEntity<>(claseOut, HttpStatus.OK);
+        return new ResponseEntity<>(usuarioService.updateClase(clase), HttpStatus.OK);
     }
 
     /**

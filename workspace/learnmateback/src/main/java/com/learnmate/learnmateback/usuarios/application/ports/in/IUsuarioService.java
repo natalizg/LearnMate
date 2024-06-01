@@ -18,15 +18,15 @@ public interface IUsuarioService {
 
     List<Usuario> getAllProfesoresByIdEstudiante(Long idEstudiante);
 
-    List<Clase> getAllClasesByIdProfesorOrIdEstudiante(Long idEstudiante, Long idProfesor);
+    List<ClaseDto> getAllClasesByIdProfesorOrIdEstudiante(Long idEstudiante, Long idProfesor);
 
     Usuario createUsuario(UsuarioDto usuario, String password);
 
     Usuario updateUsuario(UsuarioDto usuario, String password);
 
-    Clase createClase(ClaseDto clase);
+    ClaseDto createClase(ClaseDto clase);
 
-    Clase updateClase(ClaseDto clase);
+    ClaseDto updateClase(ClaseDto clase);
 
     void deleteClase(Long idClase);
 

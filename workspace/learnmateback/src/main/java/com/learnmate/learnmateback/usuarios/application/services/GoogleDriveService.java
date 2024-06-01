@@ -82,27 +82,13 @@ public class UsuarioService implements IUsuarioService {
                 .stream().map(Profesor::getUsuario).toList();
     }
 
-    public List<ClaseDto> getAllClasesByIdProfesorOrIdEstudiante(Long idEstudiante, Long idProfesor) {
+    public List<Clase> getAllClasesByIdProfesorOrIdEstudiante(Long idEstudiante, Long idProfesor) {
 
-        List<Clase> clases = Optional.ofNullable(idEstudiante)
+        return Optional.ofNullable(idEstudiante)
                 .map(estudianteId -> claseRepository.findAllByEstudiante_IdEstudiante(estudianteId))
                 .orElseGet(() -> Optional.ofNullable(idProfesor)
                         .map(profesorId -> claseRepository.findAllByProfesor_IdProfesor(profesorId))
                         .orElse(null));
-
-        return clases.stream().map(this::convertClaseToDto).collect(Collectors.toList());
-
-    }
-
-    private ClaseDto convertClaseToDto(Clase clase) {
-        ClaseDto dto = new ClaseDto();
-        dto.setIdClase(clase.getIdClase());
-        dto.setFecha(clase.getFecha());
-        dto.setUsuarioEstudiante(clase.getEstudiante().getUsuario());
-        dto.setUsuarioProfesor(clase.getProfesor().getUsuario());
-        dto.setTramoHorario(clase.getTramoHorario());
-        dto.setMateria(clase.getMateria());
-        return dto;
     }
 
     @Override
@@ -176,7 +162,7 @@ public class UsuarioService implements IUsuarioService {
     }
 
     @Override
-    public ClaseDto createClase(ClaseDto clase) {
+    public Clase createClase(ClaseDto clase) {
 
         Clase nuevaClase = modelMapper.map(clase, Clase.class);
 
@@ -197,11 +183,11 @@ public class UsuarioService implements IUsuarioService {
         nuevaClase.setMateria(materia);
 
         // Creo y devuelvo la nueva clase
-        return convertClaseToDto(claseRepository.save(nuevaClase));
+        return claseRepository.save(nuevaClase);
     }
 
     @Override
-    public ClaseDto updateClase(ClaseDto clase) {
+    public Clase updateClase(ClaseDto clase) {
 
         if (clase.getIdClase() == null) {
             throw new IllegalArgumentException("El ID de la clase introducida no puede ser nulo");
@@ -230,7 +216,7 @@ public class UsuarioService implements IUsuarioService {
         actualizarClase.setMateria(materia);
 
         // Creo y devuelvo la nueva clase
-        return convertClaseToDto(claseRepository.save(actualizarClase));
+        return claseRepository.save(actualizarClase);
     }
 
     @Override

@@ -18,6 +18,10 @@ public class ClaseDto {
 
     private Profesor profesor;
 
+    private Usuario usuarioEstudiante;
+
+    private Usuario usuarioProfesor;
+
     private TramoHorario tramoHorario;
 
     private Materia materia;
