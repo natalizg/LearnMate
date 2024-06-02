@@ -38,11 +38,13 @@ const handleFileChange = (event: Event) => {
 const handleSubmit = async () => {
   if (file.value) {
     const formData = new FormData();
-    formData.append('file', file.value);
-    console.log(file.value);
+    formData.append('foto', file.value);
+    formData.append('idUsuario', idUser.value.toString());
+
     try {
-      const response = await axios.put(`https://localhost:8443/learnmateback/usuarios/setFotoUsuario?idUsuario=${idUser.value}`,
-        file.value,
+      const response = await axios.put(
+        `https://localhost:8443/learnmateback/usuarios/setFotoUsuario`,
+        formData,
         {
           headers: {
             'Content-Type': 'multipart/form-data',
