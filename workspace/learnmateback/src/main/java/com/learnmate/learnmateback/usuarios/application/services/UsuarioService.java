@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -74,14 +75,32 @@ public class UsuarioService implements IUsuarioService {
 
     public List<Usuario> getAllEstudiantesByidProfesor(Long idProfesor) {
 
-        return claseRepository.findAllByProfesor_IdProfesor(idProfesor).stream().map(Clase::getEstudiante).toList()
-                .stream().map(Estudiante::getUsuario).toList();
+        return claseRepository.findAllByProfesor_IdProfesor(idProfesor).stream()
+                .map(Clase::getEstudiante)
+                .map(Estudiante::getUsuario)
+                .collect(Collectors.toMap(
+                        Usuario::getIdUsuario,
+                        Function.identity(),
+                        (existing, replacement) -> existing
+                ))
+                .values()
+                .stream()
+                .collect(Collectors.toList());
     }
 
     public List<Usuario> getAllProfesoresByIdEstudiante(Long idEstudiante) {
 
-        return claseRepository.findAllByEstudiante_IdEstudiante(idEstudiante).stream().map(Clase::getProfesor).toList()
-                .stream().map(Profesor::getUsuario).toList();
+        return claseRepository.findAllByEstudiante_IdEstudiante(idEstudiante).stream()
+                .map(Clase::getProfesor)
+                .map(Profesor::getUsuario)
+                .collect(Collectors.toMap(
+                        Usuario::getIdUsuario,
+                        Function.identity(),
+                        (existing, replacement) -> existing
+                ))
+                .values()
+                .stream()
+                .collect(Collectors.toList());
     }
 
     public List<ClaseDto> getAllClasesByIdProfesorOrIdEstudiante(Long idEstudiante, Long idProfesor) {

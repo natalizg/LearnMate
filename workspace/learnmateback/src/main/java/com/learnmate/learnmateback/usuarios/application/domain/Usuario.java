@@ -44,6 +44,7 @@ public class Usuario implements Serializable {
     private String password;
 
     @Column(name="FOTO")
+    @Lob
     private byte[] foto;
 
     @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
