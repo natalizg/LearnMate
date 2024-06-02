@@ -207,8 +207,6 @@ const handleSubmit = () => {
     estudiante: null
   }
 
-  console.log("mandando a crear...")
-  console.table(newUser);
   signProfessor(newUser);
   
 };

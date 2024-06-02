@@ -1,6 +1,7 @@
 import axios from "axios";
 import { PostUser} from "../types/PostUserType/PostUserType";
 import { PostStudent } from "../types/PostUserType/PostStudentType";
+import { ClassType } from "../types/ClassType";
 
 const API_URL = 'https://localhost:8443/learnmateback';
 
@@ -25,11 +26,39 @@ export function API(){
         return response.data;
     }
 
+    const createClass = async (newClass:ClassType) => {
+        const response = await axios.post(`${API_URL}/usuarios/createClase`, newClass);
+        return response.data
+    }
+
+    const getAllClassByIdEst = async (id:number) => {
+        const response = await axios.get(`${API_URL}/usuarios/getAllClasesByIdProfesorOrIdEstudiante?idEstudiante=${id}`)
+        return response.data;
+    }
+    const getAllClassByIdProf = async (id:number) => {
+        const response = await axios.get(`${API_URL}/usuarios/getAllClasesByIdProfesorOrIdEstudiante?idProfesor=${id}`)
+        return response.data;
+    }
+
+    const getAllEstByIdProf = async (id:number) => {
+        const response = await axios.get(`${API_URL}/usuarios/getAllEstudiantesByidProfesor?idProfesor=${id}`)
+        return response.data;
+    }
+
+    const getAllProfByIdEst = async (id:number) => {
+        const response = await axios.get(`${API_URL}/usuarios/getAllProfesoresByIdEstudiante?idEstudiante=${id}`)
+        return response.data;
+    }
 
     return{
         getUserLoginAPI,
         createUser,
         createStudent,
-        getFilteredProfessor
+        getFilteredProfessor,
+        createClass,
+        getAllClassByIdEst,
+        getAllClassByIdProf,
+        getAllEstByIdProf,
+        getAllProfByIdEst
     }
 }

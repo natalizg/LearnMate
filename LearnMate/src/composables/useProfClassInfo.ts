@@ -1,10 +1,11 @@
 import { ref } from "vue";
 import { ProfessorFilterType } from "../types/ProfessorFilterType";
 import { API } from "../services/API";
-
+import useLogin from "./useLogin";
+import { ClassType } from "../types/ClassType";
 export default function useProfClassInfo() {
-    
-    const { getFilteredProfessor } = API();
+    const {user} = useLogin();
+    const { getFilteredProfessor, createClass} = API();
     const filteredProfs = ref<ProfessorFilterType[]>([]);
 
     async function fetchProfs(precioMin:number, precioMax:number, materia:number, tramoHorario:string) {
@@ -12,7 +13,6 @@ export default function useProfClassInfo() {
         const profFetch = await getFilteredProfessor(precioMin, precioMax, materia, tramoHorario);
         if(profFetch) {
             //por cada profesor:
-            console.table(profFetch);
             profFetch.content.forEach((professor:any) => {
                 //creamos la tarjeta prof
                 const profCard: ProfessorFilterType = {
@@ -31,10 +31,31 @@ export default function useProfClassInfo() {
         }
     }
 
+    async function createNewClass(date:string, idProf:number | undefined, idTramo:number, idMat:number | undefined) {
+
+        const newClass:ClassType = {
+            fecha: date,
+            estudiante: {
+                idEstudiante: user.value?.estudiante.idEstudiante
+            },
+            profesor: {
+                idProfesor: idProf
+            },
+            tramoHorario: {
+                idTramoHorario: idTramo
+            },
+            materia: {
+                idMateria: idMat
+            }
+
+        }
+        createClass(newClass);
+    }
 
 
     return {
         filteredProfs,
-        fetchProfs
+        fetchProfs,
+        createNewClass,
     };
 }

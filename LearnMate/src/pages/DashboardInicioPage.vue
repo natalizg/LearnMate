@@ -8,42 +8,64 @@
     <div class="row-prof-alum">
       <h3>{{ titleText }}</h3>
       <div class="prof-alum">
-        <StudentProfessorCard/>
+        <div class="prof-alum">
+        <StudentProfessorCard 
+          v-for="person in userPersons" 
+          :key="person.idUsuario"
+          :nombreCompleto="`${person.nombre} ${person.apellidos}`"
+          :materiaNombre="person.profesor?.materia?.nombre || user?.profesor.materia.nombre"
+          :materiaColor="person.profesor?.materia?.color || user?.profesor.materia.color"
+        />
+      </div>
       </div>
     </div>
     <div class="row-clases">
-      <TableClassComponent :text=tableText />
+      <TableClassComponent :text=tableText :userClasses=userClasses />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { UserType } from '../types/UserType';
 import useLogin from '../composables/useLogin';
 import TableClassComponent from '../components/TableClassComponent.vue';
 import StudentProfessorCard from '../components/StudentProfessorCard.vue';
-
+import { API } from '../services/API';
 
 const { isStudent, isProfessor } = useLogin();
+const {getAllClassByIdEst, getAllClassByIdProf, getAllEstByIdProf, getAllProfByIdEst} = API()
+const titleText = ref('');
+const tableText = ref('');
 const user = ref<UserType | null>(null);
+const idRol = ref<number>(-1)
+const userClasses= ref<any>([]);
+const userPersons = ref<any>([]);
 
 const storedUser = localStorage.getItem('user');
 
-if (storedUser) {
-  user.value = JSON.parse(storedUser) as UserType;
-}
+const fetchData = async () => {
+  if (storedUser) {
+    user.value = JSON.parse(storedUser) as UserType;
+    if (isStudent.value) {
+      idRol.value = user.value.estudiante.idEstudiante;
+      titleText.value = 'Tus Profesores';
+      tableText.value = 'Profesor';
+      userClasses.value = await getAllClassByIdEst(idRol.value);
+      userPersons.value = await getAllProfByIdEst(idRol.value);
+    } else if (isProfessor.value) {
+      idRol.value = user.value.profesor.idProfesor;
+      titleText.value = 'Tus Estudiantes';
+      tableText.value = 'Estudiante';
+      userClasses.value = await getAllClassByIdProf(idRol.value);
+      userPersons.value = await getAllEstByIdProf(idRol.value);
+    }
+  }
+};
 
-//textos:
-const titleText = ref('');
-const tableText = ref('');
-if (isStudent.value) {
-  titleText.value = 'Tus Profesores';
-  tableText.value = 'Profesor'
-} else if (isProfessor.value) {
-  titleText.value = 'Tus Estudiantes';
-  tableText.value = 'Estudiante';
-}
+onMounted(() => {
+  fetchData();
+});
 
 </script>
 

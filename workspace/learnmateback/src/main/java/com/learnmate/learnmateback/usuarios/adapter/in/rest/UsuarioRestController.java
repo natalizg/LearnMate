@@ -183,7 +183,7 @@ public class UsuarioRestController {
 
         UsuarioDto usuarioOut = modelMapper.map(usuarioService.setFotoUsuario(idUsuario, foto), UsuarioDto.class);
 
-        return new ResponseEntity<>(usuarioOut, HttpStatus.CREATED);
+        return new ResponseEntity<>(usuarioOut, HttpStatus.OK);
     }
 
     /**

@@ -1,4 +1,11 @@
 <script setup lang="ts">
+import { defineProps } from 'vue';
+
+const props = defineProps({
+  nombreCompleto: String,
+  materiaNombre: String,
+  materiaColor: String,
+});
 
 </script>
 
@@ -10,9 +17,9 @@
             </div>
             <div class="card-content">
                 <div class="name-description">
-                    <h2>Natalia Zarzuela</h2>
-                    <div class="profession">
-                        Inglés
+                    <h2>{{ props.nombreCompleto }}</h2>
+                    <div  :style="{ backgroundColor: '#' + materiaColor }" class="profession" >
+                        {{ props.materiaNombre }}
                     </div>
                 </div>
             </div>
@@ -50,6 +57,9 @@
             align-items: center;
             .name-description{
                 margin: 0px 15px;
+                h2{
+                    font-size: 20px;
+                }
                 p{
                     font-size:17px;
                 }

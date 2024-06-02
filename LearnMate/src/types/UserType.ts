@@ -7,6 +7,7 @@ export type UserType = {
     nombre: string,
     apellidos: string,
     telefono: number,
+    foto: string,
     profesor: ProfessorType,
-    estudiante: StudentType					
+    estudiante: StudentType		
 }

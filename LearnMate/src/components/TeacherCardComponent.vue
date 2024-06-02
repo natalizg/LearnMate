@@ -21,7 +21,12 @@
             </div>
         </div>
     </div>
-    <ClassReservation v-if="isOpenClassReserv" @close-modal="closeModal"/>
+    <ClassReservation 
+    v-if="isOpenClassReserv" 
+    @close-modal="closeModal"
+    :idProf="id"
+    :idMateria="idMateria"
+    :idTramos="idTramos" />
 </template>
 
 <script setup lang="ts">

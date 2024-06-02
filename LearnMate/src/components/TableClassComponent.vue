@@ -1,5 +1,3 @@
-
-
 <template>
     <div class="row">
       <div class="col-12 grid-margin">
@@ -11,35 +9,20 @@
                 <thead>
                   <tr>
                     <th> {{text}} </th>
-                    <th> Asignatura </th>
+                    <th> Materia </th>
                     <th> Fecha </th>
                     <th> Hora </th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
+                  <tr v-for="clase in userClasses" :key="clase.idClase">
+                    
                     <td class="name">
-                      <img src="../assets/user-standar.jpg" class="me-2" alt="image"> <p>David Grey</p>
+                      <img src="../assets/user-standar.jpg" class="me-2" alt="image"> <p><p>{{ getNombre(clase) }}</p></p>
                     </td>
-                    <td class="asignatura"> <p>Química</p></td>
-                    <td> 22/05/2024</td>
-                    <td> 17:30 </td>
-                  </tr>
-                  <tr>
-                    <td class="name">
-                      <img src="../assets/user-standar.jpg" class="me-2" alt="image">  <p> Stella Johnson</p>
-                    </td>
-                    <td class="asignatura"> <p>Historia</p> </td>
-                    <td> 10/05/2024</td>
-                    <td> 16:00 </td>
-                  </tr>
-                  <tr>
-                    <td class="name">
-                      <img src="../assets/user-standar.jpg" class="me-2" alt="image">  <p>Marina Michel</p>
-                    </td>
-                    <td class="asignatura"> <p>Matemáticas</p> </td>
-                    <td> 16/08/2024</td>
-                    <td> 12:00 </td>
+                    <td class="asignatura"> <p  class="materia-color" :style="{ backgroundColor: '#' + clase.materia.color }">{{clase.materia.nombre}}</p></td>
+                    <td> {{ new Date(clase.fecha).toLocaleDateString() }}</td>
+                    <td>{{ clase.tramoHorario.descripcion }} </td>
                   </tr>
                 </tbody>
               </table>
@@ -94,19 +77,35 @@
 
   .name{
     display:flex;
+    align-items: center;
     p{
       margin-left:15px;
     }
+  }
+
+  .materia-color{
+    width:80px;
+    text-align: center;
+    padding:3px 0px;
+    border-radius:15px;
+    font-weight: 600;
   }
   </style>
 
 <script lang="ts" setup>
 import { DefineProps } from 'vue';
-
-defineProps({
-  text: String
+const props = defineProps({
+  text: String,
+  userClasses: Object
 })
 
-
+const getNombre = (clase: any) => {
+  if (props.text === 'Profesor') {
+    return clase.usuarioProfesor.nombre;
+  } else if (props.text === 'Estudiante') {
+    return clase.usuarioEstudiante.nombre;
+  }
+  return '';
+};
 </script>
   

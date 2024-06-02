@@ -5,16 +5,21 @@ import { UserType } from "../types/UserType";
 import { PostUser } from "../types/PostUserType/PostUserType";
 import { PostStudent } from "../types/PostUserType/PostStudentType";
 
-const user = ref<UserType | null>(null);
+const { getUserLoginAPI, createUser, createStudent } = API();
+
+// Obtener el usuario almacenado en localStorage al cargar la página
+const storedUser = JSON.parse(localStorage.getItem("user") || "null");
+const user = ref<UserType | null>(storedUser);
+
 const emailProf = ref('');
 const passwordProf = ref('');
 
-// Obtener los valores almacenados en localStorage al cargar la página:
+// Obtener los valores almacenados en localStorage al cargar la página
 const isLog = ref(localStorage.getItem("isLog") === "true" || false);
 const isProfessor = ref(localStorage.getItem("isProfessor") === "true" || false);
 const isStudent = ref(localStorage.getItem("isStudent") === "true" || false);
 
-// Verificar si los valores en localStorage existen:
+// Verificar si los valores en localStorage existen
 if (localStorage.getItem("isLog") === null) {
     localStorage.setItem("isLog", "false");
 }
@@ -26,27 +31,23 @@ if (localStorage.getItem("isStudent") === null) {
 }
 
 export default function useLogin() {
-    const { getUserLoginAPI, createUser, createStudent } = API();
 
     async function login(email: string, password: string) {
-
         const fetchedUser = await getUserLoginAPI(email, password);
         if (fetchedUser) {
-
-            // Almacenar el usuario en localStorage
             user.value = fetchedUser;
             localStorage.setItem("user", JSON.stringify(user.value));
 
-            // Configurar las variables según los datos del usuario
             isStudent.value = user.value?.estudiante !== null;
             isProfessor.value = user.value?.profesor !== null;
             isLog.value = true;
 
-            // Guardar los valores actualizados en localStorage
             localStorage.setItem("isLog", isLog.value.toString());
             localStorage.setItem("isProfessor", isProfessor.value.toString());
             localStorage.setItem("isStudent", isStudent.value.toString());
-
+            console.log("es profesor: " + isProfessor.value + " es estudiante: " + isStudent.value);
+            console.log("ESTE ES MI USUARIO: ");
+            console.table(user.value);
             router.push("/dashboard");
         } else {
             console.error("Login failed: Invalid user data");
@@ -67,7 +68,6 @@ export default function useLogin() {
     function sendProfessor(email: string, password: string) {
         emailProf.value = email;
         passwordProf.value = password;
-        console.log(emailProf.value, passwordProf.value);
         router.push("/professor-register");
     }
 
@@ -76,15 +76,13 @@ export default function useLogin() {
 
         if (createdUser) {
             user.value = createdUser;
-            console.log("creando usuario... :");
-            console.table(user.value);
             
-            //iniciamos sesión:
             isLog.value = true;
             isProfessor.value = true;
             localStorage.setItem("isLog", isLog.value.toString());
             localStorage.setItem("isProfessor", isProfessor.value.toString());
             localStorage.setItem("user", JSON.stringify(user.value));
+            console.log("es profesor: " + isProfessor.value + "es estudiante: " + isStudent.value);
             router.push("/dashboard");
         } else {
             console.error("User creation failed: Invalid user data");
@@ -92,22 +90,20 @@ export default function useLogin() {
     }
 
     async function signStudent(newUser: PostStudent, password:string) {
-
         const createdUser = await createStudent(newUser, password);
         if(createdUser) {
             user.value = createdUser;
             localStorage.setItem("user", JSON.stringify(user.value));
 
-            //iniciamos sesión:
             isLog.value = true;
             isStudent.value = true;
             localStorage.setItem("isLog", isLog.value.toString());
             localStorage.setItem("isStudent", isStudent.value.toString());
+            console.log("es profesor: " + isProfessor.value + "es estudiante: " + isStudent.value);
             router.push("/dashboard");
         }else {
             console.error("User creation failed: Invalid user data");
         }
-        
     }
 
     function routeSecurity() {
@@ -115,6 +111,7 @@ export default function useLogin() {
             router.push("/error");
         }
     }
+    
 
     return {
         isLog,

@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 import useLogin from '../composables/useLogin';
+import { UserType } from '../types/UserType';
+
 const {logout} = useLogin()
 const navProps = defineProps({
-    bg: Boolean,
+    bg: Boolean
 });
 
 const showDropdown = ref(false);
@@ -27,6 +29,23 @@ onMounted(() => {
 onBeforeUnmount(() => {
     window.removeEventListener('click', handleClickOutside);
 });
+
+const storedUser = localStorage.getItem('user');
+
+const user = ref<UserType | null>(null);
+
+const profilePic = ref('');
+const fetchData = async () => {
+  if (storedUser) {
+    user.value = JSON.parse(storedUser) as UserType;
+    profilePic.value = user.value.foto;
+  }
+};
+
+onMounted(() => {
+  fetchData();
+});
+
 </script>
 
 <template>
@@ -41,7 +60,7 @@ onBeforeUnmount(() => {
             <div class="right">
                 <div class="button-profile">
                     <button @click="openMenu">
-                        <img src="../assets/user-standar.jpg" alt="Perfil">
+                        <img v-bind:src="'data:image/jpeg;base64,'+profilePic" />
                         <i :class="[showDropdown ? 'fa-chevron-up' : 'fa-chevron-down', 'fas', 'fa-xs', 'ml-2']"></i>
                     </button>
                     <ul v-if="showDropdown" id="dropdown-menu" class="dropdown-menu">
