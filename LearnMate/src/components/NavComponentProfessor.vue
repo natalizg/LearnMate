@@ -60,7 +60,9 @@ onMounted(() => {
             <div class="right">
                 <div class="button-profile">
                     <button @click="openMenu">
-                        <img v-bind:src="'data:image/jpeg;base64,'+profilePic" />
+                        <img  v-if="profilePic === null" src="../assets/user-standar.jpg" alt="">
+                        <img v-else v-bind:src="'data:image/jpeg;base64,'+profilePic" />
+                        
                         <i :class="[showDropdown ? 'fa-chevron-up' : 'fa-chevron-down', 'fas', 'fa-xs', 'ml-2']"></i>
                     </button>
                     <ul v-if="showDropdown" id="dropdown-menu" class="dropdown-menu">

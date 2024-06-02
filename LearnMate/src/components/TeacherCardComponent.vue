@@ -26,7 +26,8 @@
     @close-modal="closeModal"
     :idProf="id"
     :idMateria="idMateria"
-    :idTramos="idTramos" />
+    :idTramos="idTramos"
+    :closeModal="closeClassReserv" />
 </template>
 
 <script setup lang="ts">

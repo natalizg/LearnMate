@@ -15,6 +15,7 @@
           :nombreCompleto="`${person.nombre} ${person.apellidos}`"
           :materiaNombre="person.profesor?.materia?.nombre || user?.profesor.materia.nombre"
           :materiaColor="person.profesor?.materia?.color || user?.profesor.materia.color"
+          :profilePic="person.foto"
         />
       </div>
       </div>

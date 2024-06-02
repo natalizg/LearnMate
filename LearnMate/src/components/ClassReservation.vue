@@ -58,9 +58,11 @@ const { createNewClass } = useProfClassInfo();
 const props = defineProps({
     idProf: Number,
     idMateria: Number,
-    idTramos: Array<Number>
+    idTramos: Array<Number>,
+    closeModal: Function
 });
 
+const emit = defineEmits(['close-modal'])
 interface Option {
     id: number;
     name: string;
@@ -119,6 +121,7 @@ const updateFormattedDate = (newDate: Date) => {
 
 const submitForm = () => {
     createNewClass(formattedDate.value, props.idProf, selectedOption.value, props.idMateria);
+    emit('close-modal');
 };
 
 

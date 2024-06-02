@@ -5,6 +5,7 @@ const props = defineProps({
   nombreCompleto: String,
   materiaNombre: String,
   materiaColor: String,
+  profilePic: String
 });
 
 </script>
@@ -13,7 +14,8 @@ const props = defineProps({
     <div class="teacher-card">
         <div class="card">
             <div class="img">
-                <img src="../assets/user-standar.jpg" alt="">
+                <img  v-if="profilePic === null" src="../assets/user-standar.jpg" alt="">
+                <img v-else v-bind:src="'data:image/jpeg;base64,'+profilePic" />
             </div>
             <div class="card-content">
                 <div class="name-description">

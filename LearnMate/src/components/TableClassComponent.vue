@@ -18,7 +18,9 @@
                   <tr v-for="clase in userClasses" :key="clase.idClase">
                     
                     <td class="name">
-                      <img src="../assets/user-standar.jpg" class="me-2" alt="image"> <p><p>{{ getNombre(clase) }}</p></p>
+                      <img class="me-2" v-if="getPic(clase) === null" src="../assets/user-standar.jpg" alt="">
+                      <img class="me-2" v-else v-bind:src="'data:image/jpeg;base64,'+getPic(clase)" />
+                      <p>{{ getNombre(clase) }}</p>
                     </td>
                     <td class="asignatura"> <p  class="materia-color" :style="{ backgroundColor: '#' + clase.materia.color }">{{clase.materia.nombre}}</p></td>
                     <td> {{ new Date(clase.fecha).toLocaleDateString() }}</td>
@@ -105,7 +107,16 @@ const getNombre = (clase: any) => {
   } else if (props.text === 'Estudiante') {
     return clase.usuarioEstudiante.nombre;
   }
-  return '';
+  return null;
 };
+
+const getPic = (clase: any) => {
+  if (props.text === 'Profesor') {
+    return clase.usuarioProfesor.foto;
+  } else if (props.text === 'Estudiante') {
+    return clase.usuarioEstudiante.foto;
+  }
+  return '';
+}
 </script>
   

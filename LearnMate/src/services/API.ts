@@ -59,6 +59,6 @@ export function API(){
         getAllClassByIdEst,
         getAllClassByIdProf,
         getAllEstByIdProf,
-        getAllProfByIdEst
+        getAllProfByIdEst,
     }
 }

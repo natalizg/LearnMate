@@ -5,7 +5,8 @@
       <li class="perfil-container">
         <div class="perfil">
           <div class="img-profile">
-            <img src="../assets/user-standar.jpg" alt="">
+            <img  v-if="profilePic === null" src="../assets/user-standar.jpg" alt="">
+            <img v-else v-bind:src="'data:image/jpeg;base64,'+profilePic" />
           </div>
           <div class="perfil-data">
             <h3>{{user?.nombre}}</h3>
@@ -44,7 +45,7 @@
 <script setup lang="ts">
 import useLogin from '../composables/useLogin';
 import { UserType } from '../types/UserType';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 const { isStudent, isProfessor } = useLogin();
 const rol = ref('');
 if(isProfessor.value){
@@ -54,13 +55,22 @@ if(isStudent.value){
   rol.value = 'Estudiante'
 }
 
-const user = ref<UserType | null>(null);
-
 const storedUser = localStorage.getItem('user');
 
-if (storedUser) {
-  user.value = JSON.parse(storedUser) as UserType;
-}
+const user = ref<UserType | null>(null);
+
+const profilePic = ref('');
+const fetchData = async () => {
+  if (storedUser) {
+    user.value = JSON.parse(storedUser) as UserType;
+    profilePic.value = user.value.foto;
+  }
+};
+
+onMounted(() => {
+  fetchData();
+});
+
 </script>
 
 <style scoped>
