@@ -1,53 +1,60 @@
-<!-- DashboardInicioPage.vue -->
 <template>
   <div class="centro">
     <div class="component-name">
       <span><i class="fa fa-home"></i></span>
       <h3>Dashboard</h3>
     </div>
-    <div class="row-prof-alum">
-      <h3>{{ titleText }}</h3>
-      <div class="prof-alum">
+    <!-- Verifica si userClasses y userPersons están vacíos -->
+    <template v-if="userClasses.length === 0 && userPersons.length === 0">
+      <div class="row-empty">
+            <div class="left">
+                <img src="../assets/empty.png" alt="">
+            </div>
+            <div class="right">
+                <h2>¡Qué pena!</h2>
+                <h3>Esperamos que esto se llene pronto de personitas.</h3>
+            </div>
+      </div>
+    </template>
+    <template v-else>
+      <div class="row-prof-alum">
+        <h3>{{ titleText }}</h3>
         <div class="prof-alum">
-        <StudentProfessorCard 
-          v-for="person in userPersons" 
-          :key="person.idUsuario"
-          :nombreCompleto="`${person.nombre} ${person.apellidos}`"
-          :materiaNombre="person.profesor?.materia?.nombre || user?.profesor.materia.nombre"
-          :materiaColor="person.profesor?.materia?.color || user?.profesor.materia.color"
-          :profilePic="person.foto"
-        />
+          <StudentProfessorCard 
+            v-for="person in userPersons" 
+            :key="person.idUsuario"
+            :nombreCompleto="`${person.nombre} ${person.apellidos}`"
+            :materiaNombre="person.profesor?.materia?.nombre || user?.profesor.materia.nombre"
+            :materiaColor="person.profesor?.materia?.color || user?.profesor.materia.color"
+            :profilePic="person.foto"
+          />
+        </div>
       </div>
+      <div class="row-clases">
+        <TableClassComponent :text="tableText" :userClasses="userClasses" @classDeleted="removeClassById" />
       </div>
-    </div>
-    <div class="row-clases">
-      <TableClassComponent :text=tableText :userClasses=userClasses />
-    </div>
+    </template>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { UserType } from '../types/UserType';
 import useLogin from '../composables/useLogin';
 import TableClassComponent from '../components/TableClassComponent.vue';
 import StudentProfessorCard from '../components/StudentProfessorCard.vue';
 import { API } from '../services/API';
 
-const { isStudent, isProfessor } = useLogin();
-const {getAllClassByIdEst, getAllClassByIdProf, getAllEstByIdProf, getAllProfByIdEst} = API()
+const { user, isStudent, isProfessor } = useLogin();
+const { getAllClassByIdEst, getAllClassByIdProf, getAllEstByIdProf, getAllProfByIdEst } = API();
+
 const titleText = ref('');
 const tableText = ref('');
-const user = ref<UserType | null>(null);
-const idRol = ref<number>(-1)
-const userClasses= ref<any>([]);
-const userPersons = ref<any>([]);
-
-const storedUser = localStorage.getItem('user');
+const idRol = ref<number>(-1);
+const userClasses = ref<any[]>([]);
+const userPersons = ref<any[]>([]);
 
 const fetchData = async () => {
-  if (storedUser) {
-    user.value = JSON.parse(storedUser) as UserType;
+  if (user.value) {
     if (isStudent.value) {
       idRol.value = user.value.estudiante.idEstudiante;
       titleText.value = 'Tus Profesores';
@@ -68,6 +75,10 @@ onMounted(() => {
   fetchData();
 });
 
+const removeClassById = (idClase: number) => {
+  userClasses.value = userClasses.value.filter(clase => clase.idClase !== idClase);
+};
+
 </script>
 
 <style scoped>
@@ -77,7 +88,7 @@ onMounted(() => {
   flex-grow: 1;
   padding: 20px;
   background-color: #f2edf3;
-  padding-bottom:150px;
+  padding-bottom: 150px;
   .component-name {
     display: flex;
     align-items: center;
@@ -114,4 +125,22 @@ onMounted(() => {
     margin-top: 60px;
   }
 }
+
+.row-empty{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    gap: 100px;
+    margin-bottom:50px;
+    .right{
+      color: #B0BAC3;
+        h2{
+            font-size:40px;
+            font-weight: 800;
+        }
+        h3{
+            font-weight: 500;
+        }
+    }
+  }
 </style>

@@ -2,7 +2,8 @@
     <div class="teacher-card">
         <div class="card">
             <div class="photo-container">
-                <img src="../assets/user-standar.jpg" alt="">
+                <img  v-if="foto === null" src="../assets/user-standar.jpg" alt="">
+                <img v-else v-bind:src="'data:image/jpeg;base64,'+foto" />
             </div>
             <div class="info-container">
                 <div class="title">
@@ -33,13 +34,17 @@
 <script setup lang="ts">
 import useUserProgress from '../composables/useUserProgress';
 import ClassReservation from './ClassReservation.vue';
+import useLogin from '../composables/useLogin';
+import router from '../router';
 import { defineProps } from 'vue';
+const { isStudent, isLog, isProfessor } = useLogin()
 const {isOpenClassReserv, openClassReserv, closeClassReserv} = useUserProgress();
 
 const props = defineProps({
     id: Number,
     nombre: String,
     apellidos: String,
+    foto: String,
     materia: String,
     idMateria: Number,
     descripcion: String,
@@ -48,7 +53,13 @@ const props = defineProps({
 });
 
 function openModal(){
-    openClassReserv();
+    if(!isLog.value){
+        router.push('/login');
+    }else if(isProfessor.value){
+        alert("Debes ser un estudiante para contratar a un profesor");
+    }else if(isStudent){
+        openClassReserv();
+    }
 }
 
 function closeModal(){

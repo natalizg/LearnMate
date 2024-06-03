@@ -1,15 +1,16 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
+import { UserType } from '../types/UserType';
 import axios from 'axios';
-import { UserType } from '../types/UserType'; // Asegúrate de que la ruta sea correcta
+import router from '../router';
+import useLogin from '../composables/useLogin';
 
-const storedUser = localStorage.getItem('user');
-const user = ref<UserType | null>(null);
+const { user } = useLogin(); // Importa el estado global del usuario
+
 const idUser = ref<number>(-1);
 
-const fetchData = async () => {
-  if (storedUser) {
-    user.value = JSON.parse(storedUser) as UserType;
+const fetchData = () => {
+  if (user.value) {
     idUser.value = user.value.idUsuario;
   }
 };
@@ -51,17 +52,18 @@ const handleSubmit = async () => {
           },
         }
       );
-
-      console.log(response.data);
       // Aquí puedes actualizar la foto del usuario si la respuesta incluye la nueva imagen
       user.value = { ...user.value, foto: response.data.foto } as UserType;
+      localStorage.setItem("user", JSON.stringify(user.value));
     } catch (error) {
       console.error('Error al subir la foto:', error);
     }
   } else {
     console.warn('No se ha seleccionado ningún archivo.');
   }
+  router.push('/dashboard');
 };
+
 </script>
 
 <template>
@@ -80,11 +82,11 @@ const handleSubmit = async () => {
           </div>
           <div class="profile-data">
             <h3>{{ user?.nombre }} {{ user?.apellidos }}</h3>
+            <input type="file" id="file" @change="handleFileChange" />
           </div>
         </div>
         <hr />
-        <input type="file" id="file" @change="handleFileChange" />
-        <button class="btn-pic" @click="handleSubmit">Subir foto</button>
+        <button class="btn-pic" :class="{ 'disabled': !file }" @click="handleSubmit" :disabled="!file">Subir foto</button>
       </div>
       <div class="column">
         <h3>Lo que necesita tu foto</h3>
@@ -167,6 +169,7 @@ const handleSubmit = async () => {
 
       h3 {
         margin: 0;
+        margin-bottom:20px;
       }
 
       p {
@@ -228,6 +231,35 @@ const handleSubmit = async () => {
         margin: 0;
       }
     }
+  }
+}
+input[type="file"]{
+  font-family:'Figtree', 'Figtree-fallback', 'Figtree-fallback-android', 'Noto Sans', 'NotoSans-fallback', 'NotoSans-fallback-android', sans-serif;
+  font-size: 14px;
+  &::file-selector-button {
+    padding: 6px; // Ajusta el padding según lo necesites
+    background-color:#fbde68;
+    border: none;
+    border-radius: 15px;;
+    font-weight: 600;
+    margin-right:15px;
+    cursor: pointer;
+    font-size: 16px;
+    font-family: 'Figtree', 'Figtree-fallback', 'Figtree-fallback-android', 'Noto Sans', 'NotoSans-fallback', 'NotoSans-fallback-android', sans-serif;
+  }
+}
+
+.btn-pic {
+  background-color: #fbde68;
+  color: black;
+
+  &:hover {
+    background-color: #ffba24;
+  }
+
+  &.disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
   }
 }
 </style>

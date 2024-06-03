@@ -19,6 +19,7 @@ export default function useProfClassInfo() {
                     id:professor.profesor.idProfesor,
                     nombre: professor.nombre,
                     apellidos: professor.apellidos,
+                    foto: professor.foto,
                     idMateria: professor.profesor.materia.idMateria,
                     materia: professor.profesor.materia.nombre,
                     descripcion: professor.profesor.descripcion,

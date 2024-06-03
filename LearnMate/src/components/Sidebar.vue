@@ -1,16 +1,15 @@
-<!-- Sidebar.vue -->
 <template>
   <div class="sidebar">
     <ul>
       <li class="perfil-container">
         <div class="perfil">
           <div class="img-profile">
-            <img  v-if="profilePic === null" src="../assets/user-standar.jpg" alt="">
-            <img v-else v-bind:src="'data:image/jpeg;base64,'+profilePic" />
+            <img v-if="!profilePic" src="../assets/user-standar.jpg" alt="">
+            <img v-else :src="'data:image/jpeg;base64,' + profilePic" />
           </div>
           <div class="perfil-data">
-            <h3>{{user?.nombre}}</h3>
-            <p>{{rol}}</p>
+            <h3>{{ user?.nombre }}</h3>
+            <p>{{ rol }}</p>
           </div>
         </div>
       </li>
@@ -27,12 +26,6 @@
         </router-link>
       </li>
       <li>
-        <router-link to="/dashboard/notificaciones" class="opcion">
-          <p>Notificaciones</p>
-          <i class="fas fa-bell"></i>
-        </router-link>
-      </li>
-      <li>
         <router-link to="/dashboard/ajustes" class="opcion">
           <p>Ajustes</p>
           <i class="fas fa-cog"></i>
@@ -43,33 +36,23 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
 import useLogin from '../composables/useLogin';
-import { UserType } from '../types/UserType';
-import { ref, onMounted } from 'vue';
-const { isStudent, isProfessor } = useLogin();
-const rol = ref('');
-if(isProfessor.value){
-  rol.value = 'Profesor'
-}
-if(isStudent.value){
-  rol.value = 'Estudiante'
-}
 
-const storedUser = localStorage.getItem('user');
+const { user, isStudent, isProfessor } = useLogin();
 
-const user = ref<UserType | null>(null);
-
-const profilePic = ref('');
-const fetchData = async () => {
-  if (storedUser) {
-    user.value = JSON.parse(storedUser) as UserType;
-    profilePic.value = user.value.foto;
+const rol = computed(() => {
+  if (isProfessor.value) {
+    return 'Profesor';
+  } else if (isStudent.value) {
+    return 'Estudiante';
+  } else {
+    return '';
   }
-};
-
-onMounted(() => {
-  fetchData();
 });
+
+const profilePic = computed(() => user.value?.foto || '');
+
 
 </script>
 
@@ -151,5 +134,9 @@ onMounted(() => {
     }
   }
 }
-a { text-decoration: none; color:inherit; }
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
 </style>

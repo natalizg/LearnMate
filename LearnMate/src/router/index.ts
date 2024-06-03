@@ -11,7 +11,8 @@ import DashboardInicioPage from "../pages/DashboardInicioPage.vue";
 import DashboardCalendarPage from "../pages/DashboardCalendarPage.vue";
 import DashboardNotificationsPage from "../pages/DashboardNotificationsPage.vue";
 import DashBoardSettingsPage from "../pages/DashBoardSettingsPage.vue";
-
+import ContactUsPage from "../pages/ContactUsPage.vue";
+import BeATeacherPage from  "../pages/BeATeacherPage.vue";
 const routes: RouteRecordRaw[] = [
   {
     path: "/",
@@ -74,6 +75,16 @@ const routes: RouteRecordRaw[] = [
     path: "/error",
     name: "Seguridad pag",
     component: ErrorPage
+  },
+  {
+    path: "/contactanos",
+    name: "Contáctanos",
+    component: ContactUsPage
+  },
+  {
+    path: "/serprofesor",
+    name: "Hazte profesor",
+    component: BeATeacherPage
   },
 ];
 

@@ -50,6 +50,11 @@ export function API(){
         return response.data;
     }
 
+    const deleteClassById = async (id:number) => {
+        const response = await axios.delete(`${API_URL}/usuarios/deleteClase?idClase=${id}`)
+        return response.data;
+    }
+
     return{
         getUserLoginAPI,
         createUser,
@@ -60,5 +65,6 @@ export function API(){
         getAllClassByIdProf,
         getAllEstByIdProf,
         getAllProfByIdEst,
+        deleteClassById
     }
 }

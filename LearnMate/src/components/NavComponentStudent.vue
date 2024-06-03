@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { ref, onMounted, onBeforeUnmount, computed } from 'vue';
 import useLogin from '../composables/useLogin';
 import { UserType } from '../types/UserType';
-const {logout} = useLogin()
+const {logout, user } = useLogin()
 const navProps = defineProps({
     bg: Boolean
 });
@@ -29,21 +29,9 @@ onBeforeUnmount(() => {
     window.removeEventListener('click', handleClickOutside);
 });
 
-const storedUser = localStorage.getItem('user');
 
-const user = ref<UserType | null>(null);
+const profilePic = computed(() => user.value?.foto || '');
 
-const profilePic = ref('');
-const fetchData = async () => {
-  if (storedUser) {
-    user.value = JSON.parse(storedUser) as UserType;
-    profilePic.value = user.value.foto;
-  }
-};
-
-onMounted(() => {
-  fetchData();
-});
 
 </script>
 

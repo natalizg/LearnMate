@@ -22,6 +22,10 @@
                         <hr class="line" />
                     </div>
                 </div>
+                <p v-if="loginError" class="error-message">
+                    Por favor, introduzca un nombre de usuario y clave correctos.
+                    Observe que ambos campos pueden ser sensibles a mayúsculas.
+                </p>
                 <div class="form-group">
                     <label for="email">Correo Electrónico</label>
                     <input type="email" id="email" v-model="email" required placeholder="Tu correo electrónico">
@@ -52,7 +56,7 @@
     import useLogin from '../composables/useLogin';
     import showIcon from '../assets/eye.png';
     import hideIcon from '../assets/hidden.png';
-    const { login } = useLogin()
+    const { login, loginError } = useLogin()
     const email = ref('');
     const password = ref('');
     const passwordFieldType = ref<'password' | 'text'>('password');
@@ -219,5 +223,8 @@
   input::placeholder {
     font-size: 16px;
   }
+  .error-message {
+  color: red;
+}
   </style>
   

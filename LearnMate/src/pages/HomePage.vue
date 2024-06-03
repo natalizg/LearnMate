@@ -117,6 +117,7 @@ import SliderComponent from '../components/SliderComponent.vue';
                 }
             }
             .right{
+                display: flex;
                 margin-top:30px;
                 margin-left:5%;
             }

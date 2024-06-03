@@ -200,6 +200,7 @@ const handleSubmit = () => {
         :id = "prof.id"
         :nombre="prof.nombre"
         :apellidos="prof.apellidos"
+        :foto="prof.foto"
         :materia="prof.materia"
         :idMateria="prof.idMateria"
         :descripcion="prof.descripcion"

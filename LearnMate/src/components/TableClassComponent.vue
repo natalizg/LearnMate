@@ -12,6 +12,7 @@
                     <th> Materia </th>
                     <th> Fecha </th>
                     <th> Hora </th>
+                    <th> Acciones </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -25,6 +26,11 @@
                     <td class="asignatura"> <p  class="materia-color" :style="{ backgroundColor: '#' + clase.materia.color }">{{clase.materia.nombre}}</p></td>
                     <td> {{ new Date(clase.fecha).toLocaleDateString() }}</td>
                     <td>{{ clase.tramoHorario.descripcion }} </td>
+                    <td class="acciones">
+                      <button @click="handleDelete(clase.idClase)"class="delete-button">
+                        <i class="fas fa-times"></i>
+                      </button>
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -34,6 +40,46 @@
       </div>
     </div>
   </template>
+
+  
+<script lang="ts" setup>
+import { DefineProps } from 'vue';
+import { API } from '../services/API';
+const { deleteClassById } = API();
+const props = defineProps({
+  text: String,
+  userClasses: Object
+})
+
+const getNombre = (clase: any) => {
+  if (props.text === 'Profesor') {
+    return clase.usuarioProfesor.nombre;
+  } else if (props.text === 'Estudiante') {
+    return clase.usuarioEstudiante.nombre;
+  }
+  return null;
+};
+
+const getPic = (clase: any) => {
+  if (props.text === 'Profesor') {
+    return clase.usuarioProfesor.foto;
+  } else if (props.text === 'Estudiante') {
+    return clase.usuarioEstudiante.foto;
+  }
+  return '';
+}
+
+const emits = defineEmits(['classDeleted']);
+const handleDelete = async (idClase: number) => {
+  try {
+    await deleteClassById(idClase);
+    emits('classDeleted', idClase);
+  } catch (error) {
+    console.error('Error deleting class:', error);
+  }
+};
+</script>
+  
   
   <style lang="scss" scoped>
   .table {
@@ -92,31 +138,25 @@
     border-radius:15px;
     font-weight: 600;
   }
-  </style>
-
-<script lang="ts" setup>
-import { DefineProps } from 'vue';
-const props = defineProps({
-  text: String,
-  userClasses: Object
-})
-
-const getNombre = (clase: any) => {
-  if (props.text === 'Profesor') {
-    return clase.usuarioProfesor.nombre;
-  } else if (props.text === 'Estudiante') {
-    return clase.usuarioEstudiante.nombre;
-  }
-  return null;
-};
-
-const getPic = (clase: any) => {
-  if (props.text === 'Profesor') {
-    return clase.usuarioProfesor.foto;
-  } else if (props.text === 'Estudiante') {
-    return clase.usuarioEstudiante.foto;
-  }
-  return '';
+  .acciones {
+    width:100px;
 }
-</script>
-  
+
+.delete-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background-color: red;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  color: white;
+  margin-left:20px;
+}
+
+.delete-button i {
+  font-size: 14px;
+}
+  </style>

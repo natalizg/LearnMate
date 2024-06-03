@@ -6,6 +6,7 @@ import { PostUser } from "../types/PostUserType/PostUserType";
 import { PostStudent } from "../types/PostUserType/PostStudentType";
 
 const { getUserLoginAPI, createUser, createStudent } = API();
+const loginError = ref(false);
 
 // Obtener el usuario almacenado en localStorage al cargar la página
 const storedUser = JSON.parse(localStorage.getItem("user") || "null");
@@ -33,25 +34,28 @@ if (localStorage.getItem("isStudent") === null) {
 export default function useLogin() {
 
     async function login(email: string, password: string) {
-        const fetchedUser = await getUserLoginAPI(email, password);
-        if (fetchedUser) {
-            user.value = fetchedUser;
-            localStorage.setItem("user", JSON.stringify(user.value));
+        try{
+            const fetchedUser = await getUserLoginAPI(email, password);
+            if (fetchedUser) {
+                user.value = fetchedUser;
+                localStorage.setItem("user", JSON.stringify(user.value));
 
-            isStudent.value = user.value?.estudiante !== null;
-            isProfessor.value = user.value?.profesor !== null;
-            isLog.value = true;
+                isStudent.value = user.value?.estudiante !== null;
+                isProfessor.value = user.value?.profesor !== null;
+                isLog.value = true;
 
-            localStorage.setItem("isLog", isLog.value.toString());
-            localStorage.setItem("isProfessor", isProfessor.value.toString());
-            localStorage.setItem("isStudent", isStudent.value.toString());
-            console.log("es profesor: " + isProfessor.value + " es estudiante: " + isStudent.value);
-            console.log("ESTE ES MI USUARIO: ");
-            console.table(user.value);
-            router.push("/dashboard");
-        } else {
-            console.error("Login failed: Invalid user data");
+                localStorage.setItem("isLog", isLog.value.toString());
+                localStorage.setItem("isProfessor", isProfessor.value.toString());
+                localStorage.setItem("isStudent", isStudent.value.toString());
+                console.log("es profesor: " + isProfessor.value + " es estudiante: " + isStudent.value);
+                console.log("ESTE ES MI USUARIO: ");
+                console.table(user.value);
+                router.push("/dashboard");
+            }
+        }catch(error){
+            loginError.value = true;
         }
+        
     }
 
     function logout() {
@@ -125,6 +129,7 @@ export default function useLogin() {
         signProfessor,
         signStudent,
         routeSecurity,
-        user
+        user,
+        loginError
     };
 }

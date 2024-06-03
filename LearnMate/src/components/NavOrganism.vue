@@ -13,8 +13,8 @@ const navProps = defineProps({
                 <router-link to="/"><img src="../assets/black-logo.png" alt=""></router-link>
                 <div class="nav-bar">
                     <router-link to="/buscar-profesores"><a href=""> Clases Particulares</a></router-link>
-                    <a href=""> Ser Profesor</a>
-                    <a href="">Contáctanos</a>
+                    <router-link to="/serprofesor"><a href=""> Ser Profesor</a></router-link>
+                    <router-link to="/contactanos"><a href="">Contáctanos</a></router-link>
                 </div>
             </div>
             <div class="right">

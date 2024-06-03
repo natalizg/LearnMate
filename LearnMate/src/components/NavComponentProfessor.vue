@@ -1,9 +1,36 @@
-<script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from 'vue';
-import useLogin from '../composables/useLogin';
-import { UserType } from '../types/UserType';
+<template>
+    <div :class="{ 'top-nav': true, 'top-nav-yellow': navProps.bg }">
+        <nav>
+            <div class="left">
+                <router-link to="/dashboard"><img src="../assets/black-logo.png" alt="Logo"></router-link>
+                <div class="nav-bar">
+                    <a href="">Contáctanos</a>
+                </div>
+            </div>
+            <div class="right">
+                <div class="button-profile">
+                    <button @click="openMenu">
+                        <img v-if="!profilePic" src="../assets/user-standar.jpg" alt="">
+                        <img v-else :src="'data:image/jpeg;base64,' + profilePic" />
+                        
+                        <i :class="[showDropdown ? 'fa-chevron-up' : 'fa-chevron-down', 'fas', 'fa-xs', 'ml-2']"></i>
+                    </button>
+                    <ul v-if="showDropdown" id="dropdown-menu" class="dropdown-menu">
+                        <li><a href="/dashboard">Perfil</a></li>
+                        <li><a @click="logout" href="/">Cerrar Sesión</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+</template>
 
-const {logout} = useLogin()
+<script setup lang="ts">
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
+import useLogin from '../composables/useLogin';
+
+const { user, logout } = useLogin();
+
 const navProps = defineProps({
     bg: Boolean
 });
@@ -30,50 +57,9 @@ onBeforeUnmount(() => {
     window.removeEventListener('click', handleClickOutside);
 });
 
-const storedUser = localStorage.getItem('user');
-
-const user = ref<UserType | null>(null);
-
-const profilePic = ref('');
-const fetchData = async () => {
-  if (storedUser) {
-    user.value = JSON.parse(storedUser) as UserType;
-    profilePic.value = user.value.foto;
-  }
-};
-
-onMounted(() => {
-  fetchData();
-});
+const profilePic = computed(() => user.value?.foto || '');
 
 </script>
-
-<template>
-    <div :class="{ 'top-nav': true, 'top-nav-yellow': navProps.bg }">
-        <nav>
-            <div class="left">
-                <router-link to="/dashboard"><img src="../assets/black-logo.png" alt="Logo"></router-link>
-                <div class="nav-bar">
-                    <a href="">Contáctanos</a>
-                </div>
-            </div>
-            <div class="right">
-                <div class="button-profile">
-                    <button @click="openMenu">
-                        <img  v-if="profilePic === null" src="../assets/user-standar.jpg" alt="">
-                        <img v-else v-bind:src="'data:image/jpeg;base64,'+profilePic" />
-                        
-                        <i :class="[showDropdown ? 'fa-chevron-up' : 'fa-chevron-down', 'fas', 'fa-xs', 'ml-2']"></i>
-                    </button>
-                    <ul v-if="showDropdown" id="dropdown-menu" class="dropdown-menu">
-                        <li><a href="/dashboard">Perfil</a></li>
-                        <li><a  @click="logout()" href="/">Cerrar Sesión</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </div>
-</template>
 
 <style lang="scss" scoped>
 .top-nav {
@@ -88,14 +74,14 @@ onMounted(() => {
             img {
                 height: 35px;
             }
-            .nav-bar{
+            .nav-bar {
                 margin-top: 10px;
-                margin-left:60px;
-                a{
-                    color:black;
+                margin-left: 60px;
+                a {
+                    color: black;
                     text-decoration: none;
-                    font-weight:600;
-                    margin-left:10px;
+                    font-weight: 600;
+                    margin-left: 10px;
                     margin-right: 10px;
                 }
             }
