@@ -18,9 +18,9 @@ public class ClaseDto {
 
     private Profesor profesor;
 
-    private Usuario usuarioEstudiante;
+    private UsuarioDto usuarioEstudiante;
 
-    private Usuario usuarioProfesor;
+    private UsuarioDto usuarioProfesor;
 
     private TramoHorario tramoHorario;
 

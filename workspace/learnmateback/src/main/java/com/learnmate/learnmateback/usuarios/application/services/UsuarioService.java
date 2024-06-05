@@ -119,8 +119,8 @@ public class UsuarioService implements IUsuarioService {
         ClaseDto dto = new ClaseDto();
         dto.setIdClase(clase.getIdClase());
         dto.setFecha(clase.getFecha());
-        dto.setUsuarioEstudiante(clase.getEstudiante().getUsuario());
-        dto.setUsuarioProfesor(clase.getProfesor().getUsuario());
+        dto.setUsuarioEstudiante(modelMapper.map(clase.getEstudiante().getUsuario(), UsuarioDto.class));
+        dto.setUsuarioProfesor(modelMapper.map(clase.getProfesor().getUsuario(), UsuarioDto.class));
         dto.setTramoHorario(clase.getTramoHorario());
         dto.setMateria(clase.getMateria());
         return dto;
