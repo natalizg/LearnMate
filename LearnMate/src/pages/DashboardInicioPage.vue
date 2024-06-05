@@ -75,8 +75,12 @@ onMounted(() => {
   fetchData();
 });
 
-const removeClassById = (idClase: number) => {
-  userClasses.value = userClasses.value.filter(clase => clase.idClase !== idClase);
+fetchData();
+
+
+
+const removeClassById = () => {
+  fetchData();
 };
 
 </script>

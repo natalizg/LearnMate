@@ -43,7 +43,7 @@ export default defineComponent({
     const calendarOptions = ref({
       plugins: [dayGridPlugin],
       initialView: 'dayGridMonth',
-      initialDate: '2024-05-01',
+      initialDate: '2024-06-01',
       selectable: true,
       selectMirror: true,
       select: (arg: any) => {

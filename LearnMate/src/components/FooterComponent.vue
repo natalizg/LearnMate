@@ -48,7 +48,7 @@
                 <p>Google Maps</p>
                 </div>
             </div>
-            <div class="col">
+            <div class="col" id="col-news">
                 <p>Newsletter</p>
                 <p>
                     Introduce tu email para suscribirte a nuestra newsletter <br/>
@@ -90,6 +90,7 @@ footer {
       gap:100px;
       padding: 50px;
       justify-content: space-between;
+      align-items: flex-start;
       .col {
         display: flex;
         flex-direction: column;

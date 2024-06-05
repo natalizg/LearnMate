@@ -49,12 +49,17 @@
 </template>
 
 <script setup lang="ts">
-import useProfClassInfo	 from '../composables/useProfClassInfo';
+import useProfClassInfo from '../composables/useProfClassInfo';
+import { API } from '../services/API';
+import router from '../router';
 import { onMounted, ref, computed } from 'vue';
 import { DatePicker as VDatePicker } from 'v-calendar';
 import 'v-calendar/style.css';
+import { format } from 'date-fns';
 
 const { createNewClass } = useProfClassInfo();
+const { getAllClassByIdProf } = API();
+
 const props = defineProps({
     idProf: Number,
     idMateria: Number,
@@ -62,7 +67,7 @@ const props = defineProps({
     closeModal: Function
 });
 
-const emit = defineEmits(['close-modal'])
+const emit = defineEmits(['close-modal']);
 interface Option {
     id: number;
     name: string;
@@ -70,6 +75,7 @@ interface Option {
 
 const date = ref<Date | null>(null);
 const formattedDate = ref<string>('');
+const backendFormattedDate = ref<string>('');
 const selectedOption = ref<number>(1);
 const isOpenSelect = ref<boolean>(false);
 const isOpenDate = ref<boolean>(false);
@@ -113,17 +119,20 @@ const getOptionLabel = (id: number) => {
 
 const updateFormattedDate = (newDate: Date) => {
     if (newDate) {
-        formattedDate.value = newDate.toISOString().split('T')[0];
+        formattedDate.value = format(newDate, 'dd-MM-yyyy');
+        backendFormattedDate.value = format(newDate, 'yyyy-MM-dd');
     } else {
         formattedDate.value = '';
+        backendFormattedDate.value = '';
     }
 };
 
 const submitForm = () => {
-    createNewClass(formattedDate.value, props.idProf, selectedOption.value, props.idMateria);
-    emit('close-modal');
-};
 
+    createNewClass(backendFormattedDate.value, props.idProf, selectedOption.value, props.idMateria);
+    emit('close-modal');
+    router.push("/dashboard");
+};
 
 onMounted(() => {
     if (date.value) {

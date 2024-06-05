@@ -7,7 +7,7 @@
         <div class="left">
             <h1>Hazte profesor particular y forma parte de nuestra comunidad internacinal</h1>
             <p>Disfruta de horarios flexibles, gana dinero y forma parte de nuestra comunidad internacional de profesores particulares</p>
-            <button>Inscríbete como profesor</button>
+            <router-link to="/login"><button>Inscríbete como profesor</button></router-link>
         </div>
         <div class="right">
             <img src="../assets/adprueba.jpg" alt="">

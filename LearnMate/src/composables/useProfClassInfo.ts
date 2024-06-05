@@ -7,7 +7,7 @@ export default function useProfClassInfo() {
     const {user} = useLogin();
     const { getFilteredProfessor, createClass} = API();
     const filteredProfs = ref<ProfessorFilterType[]>([]);
-
+    
     async function fetchProfs(precioMin:number, precioMax:number, materia:number, tramoHorario:string) {
         filteredProfs.value = [];
         const profFetch = await getFilteredProfessor(precioMin, precioMax, materia, tramoHorario);

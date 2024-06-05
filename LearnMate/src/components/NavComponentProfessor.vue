@@ -4,7 +4,7 @@
             <div class="left">
                 <router-link to="/dashboard"><img src="../assets/black-logo.png" alt="Logo"></router-link>
                 <div class="nav-bar">
-                    <a href="">Contáctanos</a>
+                    <router-link to="/contactanos"><a href="">Contáctanos</a></router-link>
                 </div>
             </div>
             <div class="right">
