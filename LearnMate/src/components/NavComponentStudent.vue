@@ -30,7 +30,7 @@ onBeforeUnmount(() => {
 });
 
 
-const profilePic = computed(() => user.value?.foto || '');
+const profilePic = computed(() => user.value?.foto || null);
 
 
 </script>
@@ -42,7 +42,7 @@ const profilePic = computed(() => user.value?.foto || '');
                 <router-link to="/dashboard"><img src="../assets/black-logo.png" alt="Logo"></router-link>
                 <div class="nav-bar">
                     <router-link to="/buscar-profesores"><a href=""> Encontrar Profesores</a></router-link>
-                    <a href="">Contáctanos</a>
+                    <router-link to="/contactanos"><a href="">Contáctanos</a></router-link>
                 </div>
             </div>
             <div class="right">

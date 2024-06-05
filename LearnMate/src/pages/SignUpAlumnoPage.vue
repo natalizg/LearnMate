@@ -79,6 +79,7 @@
     };
   
     const handleSubmit = () => {
+      try{
         const newUser: PostStudent = {
             email: email.value,
             nombre: nombre.value,
@@ -88,6 +89,11 @@
             estudiante: null
         }
         signStudent(newUser, password.value);
+      }catch(error){
+        console.log("llega aquí")
+        
+      }
+
     };
 
 

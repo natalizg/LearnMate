@@ -87,26 +87,31 @@ export default function useLogin() {
             localStorage.setItem("isProfessor", isProfessor.value.toString());
             localStorage.setItem("user", JSON.stringify(user.value));
             console.log("es profesor: " + isProfessor.value + "es estudiante: " + isStudent.value);
-            router.push("/dashboard");
+            router.push("/uploadfoto");
         } else {
             console.error("User creation failed: Invalid user data");
         }
     }
 
     async function signStudent(newUser: PostStudent, password:string) {
-        const createdUser = await createStudent(newUser, password);
-        if(createdUser) {
-            user.value = createdUser;
-            localStorage.setItem("user", JSON.stringify(user.value));
+        try{
+            const createdUser = await createStudent(newUser, password);
+            if(createdUser) {
+                user.value = createdUser;
+                localStorage.setItem("user", JSON.stringify(user.value));
 
-            isLog.value = true;
-            isStudent.value = true;
-            localStorage.setItem("isLog", isLog.value.toString());
-            localStorage.setItem("isStudent", isStudent.value.toString());
-            console.log("es profesor: " + isProfessor.value + "es estudiante: " + isStudent.value);
-            router.push("/dashboard");
-        }else {
-            console.error("User creation failed: Invalid user data");
+                isLog.value = true;
+                isStudent.value = true;
+                localStorage.setItem("isLog", isLog.value.toString());
+                localStorage.setItem("isStudent", isStudent.value.toString());
+                console.log("es profesor: " + isProfessor.value + "es estudiante: " + isStudent.value);
+                router.push("/uploadfoto");
+            }else {
+                console.error("User creation failed: Invalid user data");
+            }
+        }catch(error){
+            console.log("lo capturo aqui")
+            throw error;
         }
     }
 

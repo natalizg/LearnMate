@@ -17,8 +17,13 @@ export function API(){
     }
 
     const createStudent = async( user:PostStudent, password:string) => {
-        const response = await axios.post(`${API_URL}/usuarios/createUsuario?password=${password}`, user)
-        return response.data
+        try{
+            const response = await axios.post(`${API_URL}/usuarios/createUsuario?password=${password}`, user)
+            return response.data
+        }catch(error){
+            console.log("pilla el error");
+            throw error;
+        }
     }
 
     const getFilteredProfessor = async (precioMin:number, precioMax:number, materia:number, disponibilidad:string) => {

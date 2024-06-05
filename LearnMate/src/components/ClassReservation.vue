@@ -128,7 +128,6 @@ const updateFormattedDate = (newDate: Date) => {
 };
 
 const submitForm = () => {
-
     createNewClass(backendFormattedDate.value, props.idProf, selectedOption.value, props.idMateria);
     emit('close-modal');
     router.push("/dashboard");

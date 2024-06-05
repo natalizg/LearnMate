@@ -13,6 +13,7 @@ import DashboardNotificationsPage from "../pages/DashboardNotificationsPage.vue"
 import DashBoardSettingsPage from "../pages/DashBoardSettingsPage.vue";
 import ContactUsPage from "../pages/ContactUsPage.vue";
 import BeATeacherPage from  "../pages/BeATeacherPage.vue";
+import UploadPhotoProfessor from "../pages/UploadPhotoProfessor.vue";
 const routes: RouteRecordRaw[] = [
   {
     path: "/",
@@ -86,6 +87,11 @@ const routes: RouteRecordRaw[] = [
     name: "Hazte profesor",
     component: BeATeacherPage
   },
+  {
+    path:"/uploadfoto",
+    name: "Sube una foto",
+    component:UploadPhotoProfessor
+  }
 ];
 
 const router = createRouter({

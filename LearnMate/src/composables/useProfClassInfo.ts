@@ -32,7 +32,7 @@ export default function useProfClassInfo() {
         }
     }
 
-    async function createNewClass(date:string, idProf:number | undefined, idTramo:number, idMat:number | undefined) {
+    function createNewClass(date:string, idProf:number | undefined, idTramo:number, idMat:number | undefined) {
 
         const newClass:ClassType = {
             fecha: date,

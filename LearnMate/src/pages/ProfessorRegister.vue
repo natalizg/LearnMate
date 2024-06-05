@@ -50,75 +50,7 @@
           </div>
           <button type="button" :disabled="!step1IsValid" @click="nextStep">Siguiente</button>
         </div>
-
         <!-- PASO 2 -->
-        <div v-else-if="currentStep === 2" class="step">
-          <div class="login">
-            <p>
-              Elige una foto que ayude a los estudiantes a conocerte.
-            </p>
-          </div>
-          <div class="upload-photo">
-            <hr>
-            <div class="row">
-              <div class="profile-pic">
-                <img src="../assets/asian-woman.jpg" alt="">
-              </div>
-              <div class="profile-data">
-                <h3>{{ nombre }} {{ apellidos }}</h3>
-                <p>Profesora de {{ materia }}</p>
-              </div>
-            </div>
-            <hr>
-            <button class="btn-pic"> Subir foto</button>
-          </div>
-          <div class="column">
-            <h3>Lo que necesita tu foto</h3>
-            <div class="row">
-              <img src="../assets/pp1.jpg" alt="">
-              <img src="../assets/pp2.jpg" alt="">
-              <img src="../assets/pp3.jpg" alt="">
-              <img src="../assets/pp4.jpg" alt="">
-            </div>
-            <div class="list">
-              <div class="row">
-                <div class="check-pic">
-                  <img class="check" src="../assets/check.png" alt="">
-                </div>
-                <p>Debes mirar hacia delante</p>
-              </div>
-              <div class="row">
-                <div class="check-pic">
-                  <img class="check" src="../assets/check.png" alt="">
-                </div>
-                <p>Enmarca la cabeza y los hombros</p>
-              </div>
-              <div class="row">
-                <div class="check-pic">
-                  <img class="check" src="../assets/check.png" alt="">
-                </div>
-                <p>Asegúrate de que está centrada y en posición vertical</p>
-              </div>
-              <div class="row">
-                <div class="check-pic">
-                  <img class="check" src="../assets/check.png" alt="">
-                </div>
-                <p>Tu cara y ojos deben estar completamente visibles (a excepción de haber razones religiosas o
-                  culturales)</p>
-              </div>
-              <div class="row">
-                <div class="check-pic">
-                  <img class="check" src="../assets/check.png" alt="">
-                </div>
-                <p>Deberías ser la única persona en la foto</p>
-              </div>
-            </div>
-          </div>
-          <button class="volver" @click="prevStep">Volver atrás</button>
-          <button type="button" @click="nextStep">Siguiente</button>
-        </div>
-
-        <!-- PASO 3 -->
         <div v-else class="step">
           <div class="login">
             <p>
