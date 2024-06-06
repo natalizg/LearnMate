@@ -20,8 +20,7 @@ export function API(){
         try{
             const response = await axios.post(`${API_URL}/usuarios/createUsuario?password=${password}`, user)
             return response.data
-        }catch(error){
-            console.log("pilla el error");
+        } catch(error) {
             throw error;
         }
     }

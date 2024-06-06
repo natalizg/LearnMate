@@ -106,11 +106,10 @@ export default function useLogin() {
                 localStorage.setItem("isStudent", isStudent.value.toString());
                 console.log("es profesor: " + isProfessor.value + "es estudiante: " + isStudent.value);
                 router.push("/uploadfoto");
-            }else {
+            } else {
                 console.error("User creation failed: Invalid user data");
             }
-        }catch(error){
-            console.log("lo capturo aqui")
+        } catch(error) {
             throw error;
         }
     }

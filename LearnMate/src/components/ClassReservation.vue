@@ -16,7 +16,7 @@
                         <form @submit.prevent="submitForm">
                             <div class="select-box" :class="{ open: isOpenDate }">
                                 <div class="select-box__current" @click="toggleDateMenu">
-                                    <span>Fecha: {{ formattedDate }}</span>
+                                    <span>Fecha {{ formattedDate }}</span>
                                     <img class="select-box__icon" src="http://cdn.onlinewebfonts.com/svg/img_295694.svg" alt="Arrow Icon">
                                 </div>
                                 <div class="select-box__list" id="select-datepicker" v-if="isOpenDate">
@@ -29,7 +29,7 @@
                             <div class="form-group">
                                 <div class="select-box" @click="toggleMenu" :class="{ open: isOpenSelect }">
                                     <div class="select-box__current">
-                                        <span>Tramo Horario: {{ getOptionLabel(selectedOption) }}</span>
+                                        <span>Tramo Horario {{ getOptionLabel(selectedOption) }}</span>
                                         <img class="select-box__icon" src="http://cdn.onlinewebfonts.com/svg/img_295694.svg" alt="Arrow Icon">
                                     </div>
                                     <ul class="select-box__list" v-if="isOpenSelect">
@@ -39,7 +39,7 @@
                                     </ul>
                                 </div>
                             </div>
-                            <button type="submit">Enviar</button>
+                            <button type="submit" :disabled="!date" class="submit-button">Enviar</button>
                         </form>
                     </div>
                 </div>
@@ -52,7 +52,7 @@
 import useProfClassInfo from '../composables/useProfClassInfo';
 import { API } from '../services/API';
 import router from '../router';
-import { onMounted, ref, computed } from 'vue';
+import { onMounted, ref, computed, watch } from 'vue';
 import { DatePicker as VDatePicker } from 'v-calendar';
 import 'v-calendar/style.css';
 import { format } from 'date-fns';
@@ -79,6 +79,8 @@ const backendFormattedDate = ref<string>('');
 const selectedOption = ref<number>(1);
 const isOpenSelect = ref<boolean>(false);
 const isOpenDate = ref<boolean>(false);
+const classes = ref<any[]>([]);
+const availableOptions = ref<Option[]>([]);
 
 const options: Option[] = [
     { id: 1, name: '9-12' },
@@ -88,9 +90,9 @@ const options: Option[] = [
     { id: 5, name: '21-24' },
 ];
 
-// Filtrar opciones basadas en idTramos
+// Filtrar opciones basadas en idTramos y disponibilidad
 const filteredOptions = computed(() => {
-    return options.filter(option => props.idTramos?.includes(option.id));
+    return availableOptions.value.filter(option => props.idTramos?.includes(option.id));
 });
 
 const toggleMenu = () => {
@@ -121,14 +123,25 @@ const updateFormattedDate = (newDate: Date) => {
     if (newDate) {
         formattedDate.value = format(newDate, 'dd-MM-yyyy');
         backendFormattedDate.value = format(newDate, 'yyyy-MM-dd');
+        checkAvailableOptions();
+        closeOtherMenus('date');
     } else {
         formattedDate.value = '';
         backendFormattedDate.value = '';
     }
 };
 
-const submitForm = () => {
-    createNewClass(backendFormattedDate.value, props.idProf, selectedOption.value, props.idMateria);
+const checkAvailableOptions = async () => {
+    if (props.idProf !== undefined) {
+        classes.value = await getAllClassByIdProf(props.idProf);
+        const selectedDateClasses = classes.value.filter((cls: any) => cls.fecha === backendFormattedDate.value);
+        const occupiedSlots = selectedDateClasses.map((cls: any) => cls.tramoHorario.idTramoHorario);
+        availableOptions.value = options.filter(option => !occupiedSlots.includes(option.id));
+    }
+};
+
+const submitForm = async () => {
+    await createNewClass(backendFormattedDate.value, props.idProf, selectedOption.value, props.idMateria);
     emit('close-modal');
     router.push("/dashboard");
 };
@@ -136,6 +149,14 @@ const submitForm = () => {
 onMounted(() => {
     if (date.value) {
         updateFormattedDate(date.value);
+    }
+    checkAvailableOptions();
+});
+
+watch(date, () => {
+    if (date.value) {
+        updateFormattedDate(date.value);
+        closeOtherMenus('select');
     }
 });
 </script>
@@ -209,6 +230,11 @@ button {
     cursor: pointer;
     font-size: 18px;
     font-weight: 600;
+}
+
+button:disabled {
+    background-color: lightgray;
+    cursor: not-allowed;
 }
 
 .close-button {
@@ -301,5 +327,8 @@ button {
 
 .open .overlay {
     display: block;
+}
+.title{
+    margin-left:25px;
 }
 </style>

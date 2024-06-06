@@ -39,7 +39,7 @@
               <option value=11>Ruso</option>
             </select>
           </div>
-          <div class="form-group">
+          <div class="form-group" :class="{ 'error': !isTelefonoValido }">
             <label for="telefono">Teléfono</label>
             <div class="phone-container">
               <input type="text" id="telefono" v-model="telefono" required placeholder="+34 695 337 520" />
@@ -47,6 +47,7 @@
                 <img src="../assets/spain.png" alt="flag" />
               </div>
             </div>
+            <p v-if="!isTelefonoValido" class="error-message">Por favor introduzca un teléfono de 9 dígitos consecutivos</p>
           </div>
           <button type="button" :disabled="!step1IsValid" @click="nextStep">Siguiente</button>
         </div>
@@ -58,9 +59,10 @@
               educación, y menciona brevemente tus intereses y aficiones.
             </p>
           </div>
-          <div class="form-group">
+          <div class="form-group" :class="{ 'error': !isPrecioValido }">
             <label for="precio">Precio/hora</label>
             <input type="number" id="precio" v-model="precio" required placeholder="Precio la hora">
+            <p v-if="!isPrecioValido" class="error-message">Por favor introduzca un precio válido</p>
           </div>
           <div class="form-group">
             <label for="tramosHorarios">Selecciona tus tramos horarios</label>
@@ -74,6 +76,7 @@
                 {{ tramo.label }}
               </button>
             </div>
+            <p v-if="!isTramosValidos" class="error-message">Por favor seleccione al mínimo un tramo</p>
           </div>
           <div class="form-group">
             <label for="descripcion">Sobre ti</label>
@@ -108,13 +111,19 @@ const tramosHorarios = ref([
   { id: 5, label: '21-00' }
 ]);
 const selectedTramos = ref<number[]>([]);
+const isTelefonoValido = ref(true)
+const isPrecioValido = ref(true)
+const isTramosValidos = ref(true)
 
 const step1IsValid = computed(() => {
   return nombre.value !== '' && apellidos.value !== '' && materia.value !== 0 && telefono.value !== '';
 });
 
 const nextStep = () => {
-  currentStep.value += 1;
+  isTelefonoValido.value = /^\d{9}$/.test(telefono.value);
+  if(isTelefonoValido.value){
+    currentStep.value += 1;
+  }
 };
 
 const prevStep = () => {
@@ -122,25 +131,27 @@ const prevStep = () => {
 };
 
 const handleSubmit = () => {
-
-  const newUser: PostUser =  {
-    email: emailProf.value,
-    nombre: nombre.value,
-    apellidos: apellidos.value,
-    telefono: parseInt(telefono.value),
-    profesor: {
-      descripcion: descripcion.value,
-      precio: precio.value,
-      materia: {
-        idMateria: materia.value
+  isPrecioValido.value = precio.value > 0;
+  isTramosValidos.value = selectedTramos.value.length > 0;
+  if(isPrecioValido.value && isTramosValidos.value){
+    const newUser: PostUser =  {
+      email: emailProf.value,
+      nombre: nombre.value,
+      apellidos: apellidos.value,
+      telefono: parseInt(telefono.value),
+      profesor: {
+        descripcion: descripcion.value,
+        precio: precio.value,
+        materia: {
+          idMateria: materia.value
+        },
+        tramosHorarios: selectedTramos.value.map(id => ({ idTramoHorario: id }))
       },
-      tramosHorarios: selectedTramos.value.map(id => ({ idTramoHorario: id }))
-    },
-    estudiante: null
-  }
+      estudiante: null
+    }
 
-  signProfessor(newUser);
-  
+    signProfessor(newUser);
+  }
 };
 
 const toggleTramo = (tramoId: number) => {
@@ -219,6 +230,16 @@ const toggleTramo = (tramoId: number) => {
         top: 50%;
         transform: translateY(-50%);
       }
+    }
+    .error input {
+        border: 2px solid red;
+        background-color: #fcdfdf;
+    }
+
+    .error-message {
+        color: red;
+        font-size: 16px;
+        margin:0;
     }
 
     .tramos-horarios {
