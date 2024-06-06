@@ -1,58 +1,104 @@
-<script setup lang="ts">
-</script>
-
 <template>
     <div class="container">
-        <div class="contact-us">
-            <div class="left">
-                <div class="title">
-                    <h1>Contáctanos</h1>
-                    <p>Estamos a tu disposición. Rellena tus datos y 
-                        nos pondremos en contacto contigo para darte 
-                        la información que necesites.
-                    </p>
-                </div>
-                <div class="girl">
-                    <img src="../assets/girl-sit.jpg" alt="">
-                </div>
-            </div>
-            <div class="right">
-                <div id="container-form">
-                    <form action="#" method="post" id="contact_form">
-                        <div class="name">
-                        <label for="name"></label>
-                        <input type="text" placeholder="Tu nombre" name="name" id="name_input" required>
-                        </div>
-                        <div class="email">
-                        <label for="email"></label>
-                        <input type="email" placeholder="Tu email" name="email" id="email_input" required>
-                        </div>
-                        <div class="telephone">
-                        <label for="name"></label>
-                        <input type="text" placeholder="Tu teléfono" name="telephone" id="telephone_input" required>
-                        </div>
-                        <div class="subject">
-                        <label for="subject"></label>
-                        <select placeholder="Subject line" name="subject" id="subject_input" required>
-                            <option disabled hidden selected>Me gustaría hablar:</option>
-                            <option>Ser profesor</option>
-                            <option>Ser estudiante</option>
-                            <option>Otra cosa</option>
-                        </select>
-                        </div>
-                        <div class="message">
-                        <label for="message"></label>
-                        <textarea name="message" placeholder="Me gustaría pedir información sobre..." id="message_input" cols="30" rows="5" required></textarea>
-                        </div>
-                        <div class="submit">
-                        <input type="submit" value="Send Message" id="form_button" />
-                        </div>
-                    </form>
-                    </div>
-            </div>
+      <div class="contact-us">
+        <div class="left">
+          <div class="title">
+            <h1>Contáctanos</h1>
+            <p>Estamos a tu disposición. Rellena tus datos y 
+              nos pondremos en contacto contigo para darte 
+              la información que necesites.
+            </p>
+          </div>
+          <div class="girl">
+            <img src="../assets/girl-sit.jpg" alt="">
+          </div>
         </div>
+        <div class="right">
+          <div id="container-form">
+            <form @submit.prevent="sendEmail" id="contact_form">
+              <div class="name">
+                <label for="name"></label>
+                <input type="text" placeholder="Tu nombre" v-model="name" required>
+              </div>
+              <div class="email">
+                <label for="email"></label>
+                <input type="email" placeholder="Tu email" v-model="email" required>
+              </div>
+              <div class="telephone">
+                <label for="telephone"></label>
+                <input type="text" placeholder="Tu teléfono" v-model="telephone" required>
+              </div>
+              <div class="subject">
+                <label for="subject"></label>
+                <select v-model="subject" required>
+                  <option disabled hidden value="">Me gustaría hablar:</option>
+                  <option value="Ser profesor">Ser profesor</option>
+                  <option value="Ser estudiante">Ser estudiante</option>
+                  <option value="Otra cosa">Otra cosa</option>
+                </select>
+              </div>
+              <div class="message">
+                <label for="message"></label>
+                <textarea placeholder="Me gustaría pedir información sobre..." v-model="message" cols="30" rows="5" required></textarea>
+              </div>
+              <div class="submit">
+                <input type="submit" value="Send Message" />
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
-</template>
+  </template>
+  
+  <script setup lang="ts">
+import { ref } from 'vue';
+import emailjs from 'emailjs-com';
+
+// Datos del formulario
+const name = ref('');
+const email = ref('');
+const telephone = ref('');
+const subject = ref('');
+const message = ref('');
+
+// Mensajes estándar
+const standardMessages: Record<string, string> = {
+  'Ser profesor': 'Gracias por tu interés en convertirte en profesor. Nuestro equipo se pondrá en contacto contigo pronto.',
+  'Ser estudiante': 'Gracias por tu interés en convertirte en estudiante. Nuestro equipo se pondrá en contacto contigo pronto.',
+  'Otra cosa': 'Gracias por contactarnos. Nuestro equipo se pondrá en contacto contigo pronto.'
+};
+
+// Configuración de EmailJS
+const serviceID = 'service_qimzfen';
+const templateID = 'template_hxe2dir';
+const publicKey = 'joBNN1b0wQPQOD3bu';
+
+const sendEmail = () => {
+  // Mensaje basado en la selección del usuario
+  const finalMessage: string = standardMessages[subject.value] || '';
+
+  // Parámetros a enviar
+  const templateParams = {
+    name: name.value,
+    email: email.value,
+    telephone: telephone.value,
+    subject: subject.value,
+    message: finalMessage
+  };
+
+  // Enviar correo usando EmailJS
+  emailjs.send(serviceID, templateID, templateParams, publicKey)
+    .then((response) => {
+      console.log('Correo enviado con éxito', response.status, response.text);
+      alert('Correo enviado con éxito');
+    })
+    .catch((error) => {
+      console.error('Error al enviar el correo', error);
+      alert('Hubo un error al enviar el correo');
+    });
+};
+</script>
 
 <style lang="scss" scoped>
 .container{
