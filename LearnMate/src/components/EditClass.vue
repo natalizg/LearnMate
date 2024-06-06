@@ -4,13 +4,12 @@
             <div class="modal-content">
                 <div class="class-reservation">
                     <div class="top-actions">
-                        <!-- Icono de una cruz para cerrar -->
                         <button @click="$emit('close-modal');" class="close-button">
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
                     <div class="title">
-                        <h2>Reserva tu clase</h2>
+                        <h2>Edita la clase:</h2>
                     </div>
                     <div class="form-container">
                         <form @submit.prevent="submitForm">
@@ -39,7 +38,7 @@
                                     </ul>
                                 </div>
                             </div>
-                            <button type="submit" :disabled="!date" class="submit-button">Enviar</button>
+                            <button type="submit" :disabled="!date" class="submit-button">Editar</button>
                         </form>
                     </div>
                 </div>
@@ -49,25 +48,29 @@
 </template>
 
 <script setup lang="ts">
-import useProfClassInfo from '../composables/useProfClassInfo';
 import { API } from '../services/API';
-import router from '../router';
 import { onMounted, ref, computed, watch } from 'vue';
 import { DatePicker as VDatePicker } from 'v-calendar';
 import 'v-calendar/style.css';
 import { format } from 'date-fns';
-
-const { createNewClass } = useProfClassInfo();
-const { getAllClassByIdProf } = API();
+import { EditClassType } from '../types/EditClassType';
+const { getAllClassByIdProf, editClass } = API();
 
 const props = defineProps({
-    idProf: Number,
-    idMateria: Number,
-    idTramos: Array<Number>,
-    closeModal: Function
+    closeModal: Function,
+    tramos: Array<Number>,
+    idClase:Number ,
+    idProf:Number,
+    idEst:Number,
+    idMat:Number
 });
+console.log("tramos que recibo por props: ")
+console.table(props.tramos);
+console.log("llega el id del profesor " + props.idProf + " id clase: " + props.idClase)
+console.log("id estudiante " + props.idEst + " id materia " + props.idMat)
 
-const emit = defineEmits(['close-modal']);
+
+const emit = defineEmits(['close-modal', 'edit-class']);
 interface Option {
     id: number;
     name: string;
@@ -92,7 +95,7 @@ const options: Option[] = [
 
 // Filtrar opciones basadas en idTramos y disponibilidad
 const filteredOptions = computed(() => {
-    return availableOptions.value.filter(option => props.idTramos?.includes(option.id));
+    return availableOptions.value.filter(option => props.tramos?.includes(option.id));
 });
 
 const toggleMenu = () => {
@@ -141,9 +144,27 @@ const checkAvailableOptions = async () => {
 };
 
 const submitForm = async () => {
-    await createNewClass(backendFormattedDate.value, props.idProf, selectedOption.value, props.idMateria);
+    const classEdited:EditClassType = {
+        idClase: props.idClase,
+        fecha: backendFormattedDate.value,
+        estudiante: {
+            idEstudiante: props.idEst
+        },
+        profesor: {
+            idProfesor: props.idProf
+        },
+        tramoHorario: {
+            idTramoHorario: selectedOption.value
+        },
+        materia: {
+            idMateria: props.idMat
+        }
+
+    }
+    await editClass(classEdited);
     emit('close-modal');
-    router.push("/dashboard");
+    emit('edit-class')
+    console.log("envia form")
 };
 
 onMounted(() => {
@@ -162,6 +183,7 @@ watch(date, () => {
 </script>
 
 <style lang="scss" scoped>
+
 .modal-overlay {
     position: fixed;
     top: 0;

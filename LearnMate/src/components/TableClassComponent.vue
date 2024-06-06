@@ -1,55 +1,80 @@
 <template>
-    <div class="row">
-      <div class="col-12 grid-margin">
-        <div class="card">
-          <div class="card-body">
-            <h3 class="card-title">Clases Particulares</h3>
-            <div class="table-responsive">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th> {{text}} </th>
-                    <th> Materia </th>
-                    <th> Fecha </th>
-                    <th> Hora </th>
-                    <th> Acciones </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="clase in userClasses" :key="clase.idClase">
-                    
-                    <td class="name">
-                      <img class="me-2" v-if="getPic(clase) === null" src="../assets/user-standar.jpg" alt="">
-                      <img class="me-2" v-else v-bind:src="'data:image/jpeg;base64,'+getPic(clase)" />
-                      <p>{{ getNombre(clase) }}</p>
-                    </td>
-                    <td class="asignatura"> <p  class="materia-color" :style="{ backgroundColor: '#' + clase.materia.color }">{{clase.materia.nombre}}</p></td>
-                    <td> {{ new Date(clase.fecha).toLocaleDateString() }}</td>
-                    <td>{{ clase.tramoHorario.descripcion }} </td>
-                    <td class="acciones">
-                      <button @click="handleDelete(clase.idClase)"class="delete-button">
-                        <i class="fas fa-times"></i>
-                      </button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+  <div class="row">
+    <div class="col-12 grid-margin">
+      <div class="card">
+        <div class="card-body">
+          <h3 class="card-title">Clases Particulares</h3>
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>{{ text }}</th>
+                  <th>Materia</th>
+                  <th>Fecha</th>
+                  <th>Hora</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="clase in userClasses" :key="clase.idClase">
+                  <td class="name">
+                    <img class="me-2" v-if="getPic(clase) === null" src="../assets/user-standar.jpg" alt="">
+                    <img class="me-2" v-else :src="'data:image/jpeg;base64,' + getPic(clase)" />
+                    <p>{{ getNombre(clase) }}</p>
+                  </td>
+                  <td class="asignatura">
+                    <p class="materia-color" :style="{ backgroundColor: '#' + clase.materia.color }">{{ clase.materia.nombre }}</p>
+                  </td>
+                  <td>{{ new Date(clase.fecha).toLocaleDateString() }}</td>
+                  <td>{{ clase.tramoHorario.descripcion }}</td>
+                  <td class="acciones">
+                    <button @click="handleDelete(clase.idClase)" class="delete-button">
+                      <i class="fas fa-times"></i>
+                    </button>
+                    <button v-if="isProfessor" @click="openClassEdit()" class="edit-button">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <EditClass 
+                      v-if="isOpenClassEdit" 
+                      @close-modal="closeModal"
+                      @edit-class="editClass"
+                      :closeModal="closeClassEdit"
+                      :tramos="getTramosIds(clase)"
+                      :idProf="clase.usuarioProfesor.profesor.idProfesor"
+                      :idClase="clase.idClase" 
+                      :idEst="clase.usuarioEstudiante.estudiante.idEstudiante"
+                      :idMat="clase.usuarioProfesor.profesor.materia.idMateria"/>
+                      
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
     </div>
-  </template>
+  </div>
+</template>
 
-  
 <script lang="ts" setup>
 import { DefineProps } from 'vue';
 import { API } from '../services/API';
+import useUserProgress from '../composables/useUserProgress';
+import useLogin from '../composables/useLogin';
+import EditClass from '../components/EditClass.vue';
 const { deleteClassById } = API();
+const { closeClassEdit, isOpenClassEdit, openClassEdit } = useUserProgress();
+const { isProfessor } = useLogin();
 const props = defineProps({
   text: String,
   userClasses: Object
-})
+});
+const emit = defineEmits(['handle-edit-class','classDeleted']);
+// MODAL ACTIONS:
+
+function closeModal() {
+  closeClassEdit();
+}
 
 const getNombre = (clase: any) => {
   if (props.text === 'Profesor') {
@@ -69,16 +94,24 @@ const getPic = (clase: any) => {
   return '';
 }
 
-const emits = defineEmits(['classDeleted']);
+const getTramosIds = (clase: any) => {
+  return clase.usuarioProfesor.profesor.tramosHorarios.map((tramo: { idTramoHorario: number }) => tramo.idTramoHorario);
+}
+
 const handleDelete = async (idClase: number) => {
   try {
     await deleteClassById(idClase);
-    emits('classDeleted', idClase);
+    emit('classDeleted', idClase);
   } catch (error) {
     console.error('Error deleting class:', error);
   }
 };
+
+const editClass = () => {
+  emit('handle-edit-class')
+}
 </script>
+
   
   
   <style lang="scss" scoped>
@@ -132,6 +165,7 @@ const handleDelete = async (idClase: number) => {
   }
 
   .materia-color{
+    color:white;
     width:80px;
     text-align: center;
     padding:3px 0px;
@@ -154,9 +188,24 @@ const handleDelete = async (idClase: number) => {
   cursor: pointer;
   color: white;
   margin-left:20px;
+  float:left;
 }
 
 .delete-button i {
   font-size: 14px;
+}
+.edit-button{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background-color: #fbde68;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  color: white;
+  margin-left:20px;
+  float: left;;
 }
   </style>

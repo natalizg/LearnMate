@@ -31,7 +31,7 @@
         </div>
       </div>
       <div class="row-clases">
-        <TableClassComponent :text="tableText" :userClasses="userClasses" @classDeleted="removeClassById" />
+        <TableClassComponent :text="tableText" :userClasses="userClasses" @classDeleted="removeClassById" @handle-edit-class="handleEdit" />
       </div>
     </template>
   </div>
@@ -82,6 +82,10 @@ const removeClassById = () => {
   fetchData();
 };
 
+ const handleEdit = () => {
+  console.log("CLASE BORRADA")
+  fetchData();
+}
 </script>
 
 <style scoped>

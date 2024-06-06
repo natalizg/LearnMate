@@ -2,6 +2,7 @@ import axios from "axios";
 import { PostUser} from "../types/PostUserType/PostUserType";
 import { PostStudent } from "../types/PostUserType/PostStudentType";
 import { ClassType } from "../types/ClassType";
+import { EditClassType } from "../types/EditClassType";
 
 const API_URL = 'https://localhost:8443/learnmateback';
 
@@ -59,6 +60,11 @@ export function API(){
         return response.data;
     }
 
+    const editClass = async (editClass:EditClassType) => {
+        const response = await axios.put(`${API_URL}/usuarios/updateClase`, editClass)
+        return response.data
+    }
+
     return{
         getUserLoginAPI,
         createUser,
@@ -69,6 +75,7 @@ export function API(){
         getAllClassByIdProf,
         getAllEstByIdProf,
         getAllProfByIdEst,
-        deleteClassById
+        deleteClassById,
+        editClass
     }
 }
