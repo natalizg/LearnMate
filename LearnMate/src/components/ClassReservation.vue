@@ -33,13 +33,14 @@
                                         <img class="select-box__icon" src="http://cdn.onlinewebfonts.com/svg/img_295694.svg" alt="Arrow Icon">
                                     </div>
                                     <ul class="select-box__list" v-if="isOpenSelect">
-                                        <li v-for="(option, index) in filteredOptions" :key="index" @click.stop="selectOption(option.id)">
+                                        <li v-for="(option, index) in filteredOptions" :key="index" @click.stop="selectOption(option.id)" :class="{ disabled: isOptionOccupied(option.id) }">
                                             {{ option.name }}
+                                            <span v-if="isOptionOccupied(option.id)" class="occupied-message"><i>(Profesor ocupado)</i></span>
                                         </li>
                                     </ul>
                                 </div>
                             </div>
-                            <button type="submit" :disabled="!date" class="submit-button">Enviar</button>
+                            <button type="submit" :disabled="!date || isOptionOccupied(selectedOption) " class="submit-button">Enviar</button>
                         </form>
                     </div>
                 </div>
@@ -79,8 +80,8 @@ const backendFormattedDate = ref<string>('');
 const selectedOption = ref<number>(1);
 const isOpenSelect = ref<boolean>(false);
 const isOpenDate = ref<boolean>(false);
-const classes = ref<any[]>([]);
-const availableOptions = ref<Option[]>([]);
+const classesProf = ref<any[]>([]);
+const occupiedTramos = ref<Option[]>([]);
 
 const options: Option[] = [
     { id: 1, name: '9-12' },
@@ -92,7 +93,7 @@ const options: Option[] = [
 
 // Filtrar opciones basadas en idTramos y disponibilidad
 const filteredOptions = computed(() => {
-    return availableOptions.value.filter(option => props.idTramos?.includes(option.id));
+    return options.filter(option => props.idTramos?.includes(option.id));
 });
 
 const toggleMenu = () => {
@@ -111,8 +112,13 @@ const closeOtherMenus = (current: string) => {
 };
 
 const selectOption = (optionId: number) => {
-    selectedOption.value = optionId;
-    isOpenSelect.value = false;
+    if (!isOptionOccupied(optionId)) {
+        selectedOption.value = optionId;
+        isOpenSelect.value = false;
+    }
+};
+const isOptionOccupied = (optionId: number) => {
+    return occupiedTramos.value.some(tramo => tramo.id === optionId);
 };
 
 const getOptionLabel = (id: number) => {
@@ -123,7 +129,6 @@ const updateFormattedDate = (newDate: Date) => {
     if (newDate) {
         formattedDate.value = format(newDate, 'dd-MM-yyyy');
         backendFormattedDate.value = format(newDate, 'yyyy-MM-dd');
-        checkAvailableOptions();
         closeOtherMenus('date');
     } else {
         formattedDate.value = '';
@@ -133,10 +138,12 @@ const updateFormattedDate = (newDate: Date) => {
 
 const checkAvailableOptions = async () => {
     if (props.idProf !== undefined) {
-        classes.value = await getAllClassByIdProf(props.idProf);
-        const selectedDateClasses = classes.value.filter((cls: any) => cls.fecha === backendFormattedDate.value);
-        const occupiedSlots = selectedDateClasses.map((cls: any) => cls.tramoHorario.idTramoHorario);
-        availableOptions.value = options.filter(option => !occupiedSlots.includes(option.id));
+        classesProf.value = await getAllClassByIdProf(props.idProf);
+        const selectedDateClasses = classesProf.value.filter(
+            (clase) => format(new Date(clase.fecha), 'yyyy-MM-dd') === backendFormattedDate.value
+        );
+        const occupiedTramosIds = selectedDateClasses.map((clase) => clase.tramoHorario.idTramoHorario);
+        occupiedTramos.value = options.filter((option) => occupiedTramosIds.includes(option.id));
     }
 };
 
@@ -149,16 +156,18 @@ const submitForm = async () => {
 onMounted(() => {
     if (date.value) {
         updateFormattedDate(date.value);
+        checkAvailableOptions();
     }
-    checkAvailableOptions();
 });
 
 watch(date, () => {
     if (date.value) {
         updateFormattedDate(date.value);
         closeOtherMenus('select');
+        checkAvailableOptions();
     }
 });
+
 </script>
 
 <style lang="scss" scoped>
@@ -330,5 +339,9 @@ button:disabled {
 }
 .title{
     margin-left:25px;
+}
+.disabled {
+    pointer-events: none;
+    color: grey;
 }
 </style>
