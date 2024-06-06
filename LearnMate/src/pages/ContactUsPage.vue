@@ -42,7 +42,7 @@
                 <textarea placeholder="Me gustaría pedir información sobre..." v-model="message" cols="30" rows="5" required></textarea>
               </div>
               <div class="submit">
-                <input type="submit" value="Send Message" />
+                <input id="form_button" type="submit" value="Enviar mensaje" />
               </div>
             </form>
           </div>

@@ -165,12 +165,12 @@ const editClass = () => {
   }
 
   .materia-color{
-    color:white;
+    color:black;
     width:80px;
     text-align: center;
     padding:3px 0px;
     border-radius:15px;
-    font-weight: 600;
+    font-weight: 500;
   }
   .acciones {
     width:100px;

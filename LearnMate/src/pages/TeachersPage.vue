@@ -202,6 +202,7 @@ const handleSubmit = () => {
         :apellidos="prof.apellidos"
         :foto="prof.foto"
         :materia="prof.materia"
+        :materiaColor="prof.materiaColor"
         :idMateria="prof.idMateria"
         :descripcion="prof.descripcion"
         :precio="prof.precio"

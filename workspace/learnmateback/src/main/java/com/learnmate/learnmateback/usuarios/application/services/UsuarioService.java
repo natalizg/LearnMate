@@ -257,6 +257,7 @@ public class UsuarioService implements IUsuarioService {
         actualizarClase.setProfesor(profesor);
         actualizarClase.setTramoHorario(tramoHorario);
         actualizarClase.setMateria(materia);
+        actualizarClase.setFecha(clase.getFecha());
 
         // Creo y devuelvo la nueva clase
         return convertClaseToDto(claseRepository.save(actualizarClase));

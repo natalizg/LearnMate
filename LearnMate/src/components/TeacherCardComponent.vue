@@ -8,7 +8,9 @@
             <div class="info-container">
                 <div class="title">
                     <h3>{{ nombre }} {{ apellidos }}</h3>
-                    <p>{{ materia }}</p>
+                    <td class="asignatura">
+                        <p class="materia-color" :style="{ backgroundColor: '#' + materiaColor }">{{ materia }}</p>
+                    </td>
                 </div>
                 <div class="description">
                     <p>{{ descripcion }}</p>
@@ -46,6 +48,7 @@ const props = defineProps({
     apellidos: String,
     foto: String,
     materia: String,
+    materiaColor: String,
     idMateria: Number,
     descripcion: String,
     precio: Number,
@@ -134,5 +137,15 @@ function closeModal(){
         }
     }
 }
+
+.materia-color{
+    color:black !important;
+    width:80px;
+    text-align: center;
+    padding:3px 0px;
+    border-radius:15px;
+    font-weight:500;
+  }
+  
 
 </style>

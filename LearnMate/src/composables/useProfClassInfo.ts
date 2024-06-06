@@ -22,6 +22,7 @@ export default function useProfClassInfo() {
                     foto: professor.foto,
                     idMateria: professor.profesor.materia.idMateria,
                     materia: professor.profesor.materia.nombre,
+                    materiaColor: professor.profesor.materia.color,
                     descripcion: professor.profesor.descripcion,
                     precio: professor.profesor.precio,
                     idTramos: professor.profesor.tramosHorarios.map((tramo: any) => tramo.idTramoHorario),

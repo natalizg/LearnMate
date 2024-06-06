@@ -5,6 +5,7 @@ export type ProfessorFilterType = {
     foto:string,
     idMateria: number,
     materia: string,
+    materiaColor: string,
     descripcion: string,
     precio: number,
     idTramos: any

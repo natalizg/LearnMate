@@ -67,8 +67,8 @@ const props = defineProps({
                 }
                 .profession{
                     background-color:lightcoral;
-                    color:white;
-                    font-weight: 600;
+                    color:black;
+                    font-weight: 500;
                     margin: 5px 0px;
                     margin-right:15px;
                     padding: 5px;
