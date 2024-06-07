@@ -28,7 +28,7 @@
                   <td>{{ new Date(clase.fecha).toLocaleDateString() }}</td>
                   <td>{{ clase.tramoHorario.descripcion }}</td>
                   <td class="acciones">
-                    <button @click="handleDelete(clase.idClase)" class="delete-button">
+                    <button @click="confirmAndDelete(clase.idClase)" class="delete-button">
                       <i class="fas fa-times"></i>
                     </button>
                     <button v-if="isProfessor" @click="openClassEdit()" class="edit-button">
@@ -57,6 +57,7 @@
 </template>
 
 <script lang="ts" setup>
+import Swal from 'sweetalert2';
 import { DefineProps } from 'vue';
 import { API } from '../services/API';
 import useUserProgress from '../composables/useUserProgress';
@@ -97,6 +98,29 @@ const getPic = (clase: any) => {
 const getTramosIds = (clase: any) => {
   return clase.usuarioProfesor.profesor.tramosHorarios.map((tramo: { idTramoHorario: number }) => tramo.idTramoHorario);
 }
+
+// Método para mostrar la alerta de confirmación antes de eliminar la clase
+const confirmAndDelete = async (idClase: number) => {
+  Swal.fire({
+    title: "¿Estás seguro?",
+    text: "¡No podrás revertir esto!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#fcce50",
+    cancelButtonColor: "black",
+    confirmButtonText: "Sí, elimínalo",
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      // Si se confirma, llamar al método handleDelete
+      await handleDelete(idClase);
+      Swal.fire({
+        title: "¡Eliminado!",
+        text: "Tu clase ha sido eliminada.",
+        icon: "success"
+      });
+    }
+  });
+};
 
 const handleDelete = async (idClase: number) => {
   try {
